@@ -10,13 +10,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
+import com.mmga.litedo.Model.Memo;
 import com.mmga.litedo.R;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerViewAdapter mAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerViewAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        updateData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void updateData() {
+        List<Memo> memoList = DataSupport.findAll(Memo.class);
+        mAdapter = new RecyclerViewAdapter(memoList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
 

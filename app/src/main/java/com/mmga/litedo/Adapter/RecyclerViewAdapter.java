@@ -6,13 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mmga.litedo.Model.Memo;
 import com.mmga.litedo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mmga on 2015/10/17.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
+
+    private List<Memo> memoList;
+    protected ArrayList<Integer> ids;
+
+    public RecyclerViewAdapter(List<Memo> memoList) {
+        this.memoList = memoList;
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,12 +35,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.mTextView.setText("1");
-
+        holder.mTextView.setText(memoList.get(position).getContent());
+        ids.add(position, memoList.get(position).getId());
     }
 
     @Override
     public int getItemCount() {
+        if (memoList != null) {
+            return memoList.size();
+        }
         return 0;
     }
 
