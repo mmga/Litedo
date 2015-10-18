@@ -5,6 +5,6 @@
     <version value="1" ></version>
 
     <list>
-        <mapping class="package com.mmga.litedo.Model"/>
+        <mapping class="package com.mmga.litedo.db.Model"/>
     </list>
 </litepal>  

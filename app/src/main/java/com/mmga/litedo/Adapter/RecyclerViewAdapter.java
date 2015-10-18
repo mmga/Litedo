@@ -1,25 +1,27 @@
 package com.mmga.litedo.Adapter;
 
+import android.content.ContentValues;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mmga.litedo.Model.Memo;
 import com.mmga.litedo.R;
+import com.mmga.litedo.db.Model.Memo;
 
-import java.util.ArrayList;
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
-/**
- * Created by mmga on 2015/10/17.
- */
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
 
     private List<Memo> memoList;
-    protected ArrayList<Integer> ids;
+
+    private String[] guideList = {"下拉新建", "左划删除", "单击编辑"};
+
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -34,17 +36,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.mTextView.setText(memoList.get(position).getContent());
-        ids.add(position, memoList.get(position).getId());
+        holder.recyclerViewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //item 点击事件
+                deleteData(position);
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        if (memoList != null) {
-            return memoList.size();
-        }
-        return 0;
+        return memoList.size();
     }
 
 
@@ -52,13 +58,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView mTextView;
+        public View recyclerViewItem;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             mTextView = (TextView) itemView.findViewById(R.id.text_view);
-
+            recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
         }
     }
 
+
+    //删除一条内容
+    private void deleteData(int index) {
+
+        //将要删除的项的isDone值改为1
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("isDone", "1");
+        DataSupport.update(Memo.class, contentValues, index);
+
+        memoList.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index, memoList.size());
+    }
 }

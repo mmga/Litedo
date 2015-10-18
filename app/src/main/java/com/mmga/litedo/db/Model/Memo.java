@@ -1,4 +1,4 @@
-package com.mmga.litedo.Model;
+package com.mmga.litedo.db.Model;
 
 import java.util.Date;
 
@@ -12,6 +12,8 @@ public class Memo {
     private String content;
 
     private Date deadline;
+
+    private int isDone = 0;
 
     public int getId() {
         return id;
@@ -35,5 +37,13 @@ public class Memo {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public int getIsDone() {
+        return isDone;
+    }
+
+    public void setIsDone(int isDone) {
+        this.isDone = isDone;
     }
 }

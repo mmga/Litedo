@@ -1,5 +1,6 @@
 package com.mmga.litedo.Aty;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,11 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
-import com.mmga.litedo.Model.Memo;
 import com.mmga.litedo.R;
+import com.mmga.litedo.db.Model.Memo;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerViewAdapter mAdapter;
 
+    private boolean isFirstIn = true;
+
+    private List<Memo> memoList = new ArrayList<>();
+
+    private String[] guideText = {"下拉新建", "左划删除", "单击编辑"};
+    List<Memo> guideList;
 
 
     @Override
@@ -39,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        updateData();
+        loadData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,11 +62,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateData() {
-        List<Memo> memoList = DataSupport.findAll(Memo.class);
+    //读取数据库，刷新列表
+    private void loadData() {
+        memoList = DataSupport.where("isDone = ?", "0").find(Memo.class);
+
+
+        if (isFirstIn) {
+            for (int i = 0; i < guideText.length; i++) {
+                guideList.get(i).setContent(guideText[i]);
+            }
+            mAdapter = new RecyclerViewAdapter(guideList);
+        }
+
+
         mAdapter = new RecyclerViewAdapter(memoList);
         mRecyclerView.setAdapter(mAdapter);
     }
 
 
+
+
+
 }
+
+
