@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mmga.litedo.R;
+import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
 
 import java.util.List;
@@ -16,9 +17,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     private List<Memo> memoList;
-
-    private String[] guideList = {"下拉新建", "左划删除", "单击编辑"};
-
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -39,8 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 //item 点击事件
-                int memoId = memoList.get(position).getId();
-                deleteData(position,memoId);
+//                deleteData(position);
             }
         });
 
@@ -51,6 +48,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return memoList.size();
     }
 
+    //滑动删除
+    public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
+        deleteData(viewHolder.getAdapterPosition());
+    }
+
+    //拖拽
+//    public void mOnMove(int fromPos,int toPos) {
+//        String prev = mList.remove(fromPos);
+//        mList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
+//        notifyItemMoved(fromPos, toPos);
+//    }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -67,21 +75,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-
     //删除一条内容
-    private void deleteData(int position, int memoId) {
-
-        //将要删除的项的isDone值改为1
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put("isDone", "1");
-//        DataSupport.update(Memo.class, contentValues, index);
-
-        Memo memoToUpdate = new Memo();
-        memoToUpdate.setIsDone(1);
-        memoToUpdate.update(memoId);
+    private void deleteData(int position) {
+        int memoId = memoList.get(position).getId();
+        DBUtil.deleteMemo(memoId);
 
         memoList.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, memoList.size());
+//        notifyItemRangeChanged(position, memoList.size());
     }
 }

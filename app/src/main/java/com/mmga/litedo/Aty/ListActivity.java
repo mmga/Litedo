@@ -1,24 +1,25 @@
 package com.mmga.litedo.Aty;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.R;
+import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity {
 
     private int i = 0;
 
@@ -30,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Memo> memoList = new ArrayList<>();
 
-    private String[] guideText = {"下拉新建", "左划删除", "单击编辑"};
-    List<Memo> guideList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +38,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+
+
+        ItemTouchHelper.SimpleCallback callback =new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                //拖拽
+                final int fromPos = viewHolder.getAdapterPosition();
+                final int toPos = viewHolder.getAdapterPosition();
+                return true;
+
+                //TODO
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                mAdapter.mOnSwiped(viewHolder);
+            }
+        };
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void init() {
@@ -47,9 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-//        initData();
-        loadData();
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,44 +76,32 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                i++;
-                initData(i);
-                loadData();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(ListActivity.this, EditActivity.class);
+                startActivity(i);
             }
         });
     }
 
-
-    private void initData(int i) {
-        Memo memo = new Memo();
-        memo.setContent("" + i);
-        memo.save();
+    //保存内容
+    private void saveData(int i) {
+        DBUtil.addMemo("" + i);
     }
 
 
     //读取数据库，刷新列表
     private void loadData() {
-        memoList = DataSupport.where("isDone = ?", "0").find(Memo.class);
-
-
-//        if (isFirstIn) {
-//            for (int i = 0; i < guideText.length; i++) {
-//                guideList.get(i).setContent(guideText[i]);
-//            }
-//            mAdapter = new RecyclerViewAdapter(guideList);
-//        }
-
+        memoList = DBUtil.getAllMemo(Memo.class);
 
         mAdapter = new RecyclerViewAdapter(memoList);
         mRecyclerView.setAdapter(mAdapter);
     }
 
 
-
-
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadData();
+    }
 }
 
 
