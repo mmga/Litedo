@@ -1,6 +1,5 @@
 package com.mmga.litedo.Adapter;
 
-import android.content.ContentValues;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.widget.TextView;
 
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.Model.Memo;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -42,7 +39,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 //item 点击事件
-                deleteData(position);
+                int memoId = memoList.get(position).getId();
+                deleteData(position,memoId);
             }
         });
 
@@ -71,15 +69,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     //删除一条内容
-    private void deleteData(int index) {
+    private void deleteData(int position, int memoId) {
 
         //将要删除的项的isDone值改为1
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("isDone", "1");
-        DataSupport.update(Memo.class, contentValues, index);
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put("isDone", "1");
+//        DataSupport.update(Memo.class, contentValues, index);
 
-        memoList.remove(index);
-        notifyItemRemoved(index);
-        notifyItemRangeChanged(index, memoList.size());
+        Memo memoToUpdate = new Memo();
+        memoToUpdate.setIsDone(1);
+        memoToUpdate.update(memoId);
+
+        memoList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, memoList.size());
     }
 }

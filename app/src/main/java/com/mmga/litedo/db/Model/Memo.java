@@ -1,11 +1,13 @@
 package com.mmga.litedo.db.Model;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.Date;
 
 /**
  * Created by mmga on 2015/10/17.
  */
-public class Memo {
+public class Memo extends DataSupport{
 
     private int id;
 

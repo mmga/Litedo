@@ -1,6 +1,5 @@
 package com.mmga.litedo.Aty;
 
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private int i = 0;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -47,32 +48,45 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+//        initData();
         loadData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                i++;
+                initData(i);
+                loadData();
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
     }
 
+
+    private void initData(int i) {
+        Memo memo = new Memo();
+        memo.setContent("" + i);
+        memo.save();
+    }
+
+
     //读取数据库，刷新列表
     private void loadData() {
         memoList = DataSupport.where("isDone = ?", "0").find(Memo.class);
 
 
-        if (isFirstIn) {
-            for (int i = 0; i < guideText.length; i++) {
-                guideList.get(i).setContent(guideText[i]);
-            }
-            mAdapter = new RecyclerViewAdapter(guideList);
-        }
+//        if (isFirstIn) {
+//            for (int i = 0; i < guideText.length; i++) {
+//                guideList.get(i).setContent(guideText[i]);
+//            }
+//            mAdapter = new RecyclerViewAdapter(guideList);
+//        }
 
 
         mAdapter = new RecyclerViewAdapter(memoList);
