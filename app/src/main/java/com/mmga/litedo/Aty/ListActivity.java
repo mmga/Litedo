@@ -1,6 +1,6 @@
 package com.mmga.litedo.Aty;
 
-import android.content.Intent;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.R;
@@ -29,6 +32,8 @@ public class ListActivity extends AppCompatActivity {
 
     private boolean isFirstIn = true;
 
+    private EditText mEditText;
+    private FloatingActionButton fabAdd,fabSave;
     private List<Memo> memoList = new ArrayList<>();
 
 
@@ -62,6 +67,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void init() {
+        mEditText = (EditText) findViewById(R.id.edit_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -71,20 +77,54 @@ public class ListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabSave = (FloatingActionButton) findViewById(R.id.fab_save);
+        fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ListActivity.this, EditActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(ListActivity.this, EditActivity.class);
+//                startActivity(i);
+
+                newMemo();
+            }
+        });
+
+        fabSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMemo();
             }
         });
     }
 
+
+    private void newMemo() {
+        mEditText.setText("");
+        mEditText.setVisibility(View.VISIBLE);
+        mEditText.requestFocus();
+        dimBackground(1.0f,0.3f);
+        fabAdd.setVisibility(View.GONE);
+        fabSave.setVisibility(View.VISIBLE);
+    }
+
+    private void saveMemo() {
+        dimBackground(0.3f,1.0f);
+
+        String content = mEditText.getText().toString();
+        saveData(content);
+        mEditText.setVisibility(View.GONE);
+        fabSave.setVisibility(View.GONE);
+        fabAdd.setVisibility(View.VISIBLE);
+        loadData();
+    }
+
+
+
+
+
     //保存内容
-    private void saveData(int i) {
-        DBUtil.addMemo("" + i);
+    private void saveData(String string) {
+        DBUtil.addMemo(string);
     }
 
 
@@ -101,6 +141,25 @@ public class ListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadData();
+    }
+
+
+
+    //使把变暗
+    private void dimBackground(final float from, final float to) {
+        final Window window = getWindow();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);
+        valueAnimator.setDuration(500);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.alpha = (Float) animation.getAnimatedValue();
+                window.setAttributes(params);
+            }
+        });
+
+        valueAnimator.start();
     }
 }
 
