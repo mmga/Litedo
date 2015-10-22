@@ -17,6 +17,9 @@ public class Memo extends DataSupport{
 
     private int isDone = 0;
 
+
+
+
     public int getId() {
         return id;
     }

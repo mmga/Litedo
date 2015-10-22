@@ -2,10 +2,13 @@ package com.mmga.litedo;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.mmga.litedo.db.DBUtil;
@@ -35,19 +38,32 @@ public class CustomDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_dialog);
+
         mEditText = (EditText) findViewById(R.id.edit_text);
+        Typeface type = Typeface.createFromAsset(mContext.getAssets(), "fonts/yuehei.ttf");
+        mEditText.setTypeface(type);
+
         mEditText.setText("");
         mEditText.requestFocus();
+
+        //打开软键盘
+        InputMethodManager inputMethodManager = (InputMethodManager) mEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_FORCED);
+        Log.d(">>>>>", "1");
+
         //设置默认输入法为中文
         mEditText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
         /**
          * 监听输入法按键，改回车按钮为保存
          */
         mEditText.setOnKeyListener(new View.OnKeyListener() {
+
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     DBUtil.addMemo(mEditText.getText().toString());
+                    Log.d(">>>>>", "onKey");
+                    dismiss();
                     return true;
                 }
                 return false;
@@ -57,7 +73,7 @@ public class CustomDialog extends Dialog {
         /**
          * 改变输入法中回车按钮de显示内容为“完成”
          */
-        mEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mEditText.setImeOptions(EditorInfo.IME_ACTION_NONE);
 
     }
 
