@@ -1,6 +1,8 @@
 package com.mmga.litedo.Aty;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +15,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
+import com.mmga.litedo.CustomDialog;
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -33,6 +37,7 @@ public class ListActivity extends AppCompatActivity {
     private boolean isFirstIn = true;
 
     private EditText mEditText;
+    private FrameLayout editLayout;
     private FloatingActionButton fabAdd,fabSave;
     private List<Memo> memoList = new ArrayList<>();
 
@@ -67,6 +72,8 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void init() {
+
+        editLayout = (FrameLayout) findViewById(R.id.edit_layout);
         mEditText = (EditText) findViewById(R.id.edit_text);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -82,10 +89,17 @@ public class ListActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent i = new Intent(ListActivity.this, EditActivity.class);
-//                startActivity(i);
-
-                newMemo();
+                Dialog mDialog = new CustomDialog(ListActivity.this);
+                mDialog.setCanceledOnTouchOutside(true);
+                //对话框消失时刷新数据
+                mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        loadData();
+                    }
+                });
+                mDialog.show();
+//                newMemo();
             }
         });
 
@@ -101,18 +115,19 @@ public class ListActivity extends AppCompatActivity {
     private void newMemo() {
         mEditText.setText("");
         mEditText.setVisibility(View.VISIBLE);
+        editLayout.setVisibility(View.VISIBLE);
         mEditText.requestFocus();
-        dimBackground(1.0f,0.3f);
+//        dimBackground(1.0f,0.3f);
         fabAdd.setVisibility(View.GONE);
         fabSave.setVisibility(View.VISIBLE);
     }
 
     private void saveMemo() {
-        dimBackground(0.3f,1.0f);
-
+//        dimBackground(0.3f,1.0f);
         String content = mEditText.getText().toString();
         saveData(content);
         mEditText.setVisibility(View.GONE);
+        editLayout.setVisibility(View.GONE);
         fabSave.setVisibility(View.GONE);
         fabAdd.setVisibility(View.VISIBLE);
         loadData();
@@ -131,11 +146,9 @@ public class ListActivity extends AppCompatActivity {
     //读取数据库，刷新列表
     private void loadData() {
         memoList = DBUtil.getAllMemo(Memo.class);
-
         mAdapter = new RecyclerViewAdapter(memoList);
         mRecyclerView.setAdapter(mAdapter);
     }
-
 
     @Override
     protected void onStart() {
@@ -143,9 +156,9 @@ public class ListActivity extends AppCompatActivity {
         loadData();
     }
 
-
-
-    //使把变暗
+    /**
+     * 使背景变暗
+     */
     private void dimBackground(final float from, final float to) {
         final Window window = getWindow();
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);

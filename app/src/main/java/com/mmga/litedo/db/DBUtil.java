@@ -9,13 +9,21 @@ import java.util.List;
 
 public class DBUtil {
 
+    /**
+     * 增加一个新的任务
+     * @param content
+     */
     public static void addMemo(String content){
         Memo memo = new Memo();
         memo.setContent("" + content);
+        memo.setIsDone(0);
         memo.save();
     }
 
-
+    /**
+     * 将isDone标记为1，代表已完成的任务
+     * @param memoId
+     */
     public static void deleteMemo(int memoId){
         Memo memoToUpdate = new Memo();
         memoToUpdate.setIsDone(1);
@@ -27,8 +35,15 @@ public class DBUtil {
         //TODO
     }
 
+    /**
+     * 按照id倒序查找数据
+     * @param modelClass
+     * @return
+     */
     public static List getAllMemo(Class modelClass) {
-        return DataSupport.where("isDone = ?", "0").find(Memo.class);
+        return DataSupport.where("isDone = ?", "0")
+                .order("id desc")
+                .find(Memo.class);
 
         // TODO
     }

@@ -23,15 +23,15 @@
         >
 
         <FrameLayout
+            android:id="@+id/edit_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginBottom="16dp"
-            android:layout_alignParentBottom="true"
-
-            android:background="#000000"
-            android:alpha="0">
+            android:layout_alignParentBottom="true">
+            <!--android:background="#000000"-->
+            <!--android:alpha="0">-->
 
             <EditText
                 android:layout_width="match_parent"

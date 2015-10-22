@@ -4,7 +4,7 @@
     android:layout_marginTop="1dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b3e0ff">
+    android:background="#ededed">
 
         <TextView
             android:layout_width="match_parent"
@@ -14,6 +14,10 @@
             android:id="@+id/text_view"
             android:singleLine="true"
             android:gravity= "left|center_vertical"
+
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:text="我是内容"
+
         />
 
 </FrameLayout>
