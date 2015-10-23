@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -51,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //滑动删除
     public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
         deleteData(viewHolder.getAdapterPosition());
+        MySoundPool.playSoundDelete();
     }
 
     //拖拽

@@ -3,6 +3,8 @@ package com.mmga.litedo.Aty;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,6 +18,7 @@ import android.view.Window;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.CustomDialog;
+import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -34,6 +37,7 @@ public class ListActivity extends AppCompatActivity {
     private FloatingActionButton fabAdd,fabSave;
     private List<Memo> memoList = new ArrayList<>();
 
+    private MySoundPool mSoundPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class ListActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MySoundPool.playSoundAdd();
                 fabAdd.setVisibility(View.GONE);
                 Dialog mDialog = new CustomDialog(ListActivity.this);
                 //设置dialog的位置
@@ -91,14 +96,28 @@ public class ListActivity extends AppCompatActivity {
                 mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        loadData();
+//                        延时更新UI
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Message message = new Message();
+                                message.what = UPDATE_UI;
+                                handler.sendMessage(message);
 
-                        fabAdd.setVisibility(View.VISIBLE);
+                            }
+                        }, 250);
+
+//
+//                        loadData();
+//                        fabAdd.setVisibility(View.VISIBLE);
                     }
                 });
                 mDialog.show();
             }
         });
+
+        mSoundPool = new MySoundPool(ListActivity.this);
+
 
         fabSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +145,22 @@ public class ListActivity extends AppCompatActivity {
         super.onStart();
         loadData();
     }
+
+    public static final int UPDATE_UI = 1;
+
+    private Handler handler = new Handler(){
+
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPDATE_UI:
+                    loadData();
+                    fabAdd.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }
 
 
