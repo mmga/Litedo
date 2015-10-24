@@ -3,6 +3,7 @@ package com.mmga.litedo;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.Log;
 
 /**
  * Created by mmga on 2015/10/23.
@@ -24,13 +25,16 @@ public class MySoundPool {
     }
 
     public static void playSoundAdd() {
-        soundPool.play(soundAdd, 1.0f, 1.0f, 0, 0, 1.0f);
+        soundPool.play(soundAdd, 0.3f, 0.3f, 0, 0, 1.0f);
+        Log.d(">>>>>", "soundadd");
+
 
 
     }
 
     public static void playSoundDelete() {
-        soundPool.play(soundDelete, 1.0f, 1.0f, 0, 0, 1.0f);
+        soundPool.play(soundDelete, 0.3f, 0.3f, 0, 0, 1.0f);
+        Log.d(">>>>>", "sounddelete");
 
     }
 }

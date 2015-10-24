@@ -15,7 +15,7 @@ import com.mmga.litedo.db.DBUtil;
  */
 public class WelcomeActivity extends Activity {
 
-    private final int TIME_DELAY = 500;
+    private final int TIME_DELAY = 1000;
 
     private boolean isFirstIn = false;
 
@@ -40,7 +40,7 @@ public class WelcomeActivity extends Activity {
     private void goListAty() {
         Intent i = new Intent(WelcomeActivity.this, ListActivity.class);
         startActivity(i);
-
+        finish();
     }
 
     private void initInfo() {
@@ -51,6 +51,7 @@ public class WelcomeActivity extends Activity {
         DBUtil.addMemo("开始使用吧");
 
         goListAty();
+
     }
 
 

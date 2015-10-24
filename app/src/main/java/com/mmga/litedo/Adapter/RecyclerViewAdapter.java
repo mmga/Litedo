@@ -55,12 +55,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         MySoundPool.playSoundDelete();
     }
 
-    //拖拽
+//    拖拽
 //    public void mOnMove(int fromPos,int toPos) {
-//        String prev = mList.remove(fromPos);
-//        mList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
+//        String prev = memoList.remove(fromPos);
+//        memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
 //        notifyItemMoved(fromPos, toPos);
-//    }
+    }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -84,6 +84,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         memoList.remove(position);
         notifyItemRemoved(position);
-//        notifyItemRangeChanged(position, memoList.size());
     }
 }

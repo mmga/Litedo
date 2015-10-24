@@ -3,7 +3,7 @@
     package="com.mmga.litedo" >
 
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name="com.mmga.litedo.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/litedo"
         android:label="@string/app_name"
@@ -11,11 +11,16 @@
 
         android:theme="@style/AppTheme" >
         <activity
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:name=".Aty.ListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <activity
+            android:name=".Aty.WelcomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

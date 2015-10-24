@@ -37,14 +37,16 @@ public class DBUtil {
 
     /**
      * 按照id倒序查找数据
-     * @param modelClass
      * @return
      */
-    public static List getAllMemo(Class modelClass) {
+    public static List getAllMemo() {
         return DataSupport.where("isDone = ?", "0")
                 .order("id desc")
                 .find(Memo.class);
+    }
 
-        // TODO
+    public static int getMemoNum() {
+        int num = DataSupport.where("isDone = ?", "0").count(Memo.class);
+        return num;
     }
 }

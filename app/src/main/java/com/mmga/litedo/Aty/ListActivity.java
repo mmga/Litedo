@@ -15,6 +15,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.CustomDialog;
@@ -28,7 +29,6 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
-    private int i = 0;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -38,6 +38,8 @@ public class ListActivity extends AppCompatActivity {
     private List<Memo> memoList = new ArrayList<>();
 
     private MySoundPool mSoundPool;
+
+    private TextView noItemInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,10 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 mAdapter.mOnSwiped(viewHolder);
+                if (DBUtil.getMemoNum() == 0) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    noItemInfo.setVisibility(View.VISIBLE);
+                }
             }
         };
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
@@ -69,6 +75,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void init() {
+        noItemInfo = (TextView) findViewById(R.id.no_item_info);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -119,25 +126,23 @@ public class ListActivity extends AppCompatActivity {
         mSoundPool = new MySoundPool(ListActivity.this);
 
 
-        fabSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
     }
 
-
-    //保存内容
-    private void saveData(String string) {
-        DBUtil.addMemo(string);
-    }
 
 
     //读取数据库，刷新列表
     private void loadData() {
-        memoList = DBUtil.getAllMemo(Memo.class);
-        mAdapter = new RecyclerViewAdapter(memoList);
-        mRecyclerView.setAdapter(mAdapter);
+        if (DBUtil.getMemoNum() == 0) {
+            mRecyclerView.setVisibility(View.GONE);
+            noItemInfo.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            noItemInfo.setVisibility(View.GONE);
+            memoList = DBUtil.getAllMemo();
+            mAdapter = new RecyclerViewAdapter(memoList);
+            mRecyclerView.setAdapter(mAdapter);
+
+        }
     }
 
     @Override
@@ -161,6 +166,8 @@ public class ListActivity extends AppCompatActivity {
             }
         }
     };
+
+
 }
 
 
