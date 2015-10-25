@@ -47,7 +47,7 @@ public class CustomDialog extends Dialog {
         mEditText.requestFocus();
 
         //打开软键盘
-        InputMethodManager inputMethodManager = (InputMethodManager) mEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_FORCED);
         Log.d(">>>>>", "1");
 

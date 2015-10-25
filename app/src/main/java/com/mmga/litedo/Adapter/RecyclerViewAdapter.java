@@ -55,11 +55,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         MySoundPool.playSoundDelete();
     }
 
+    //删除一条内容
+    private void deleteData(int position) {
+        int memoId = memoList.get(position).getId();
+        DBUtil.deleteMemo(memoId);
+        memoList.remove(position);
+//        memoList.add(memoList.size()-1,memoList.remove(position));
+        notifyItemRemoved(position);
+//        notifyItemInserted(memoList.size()-1);
+    }
+
 //    拖拽
-//    public void mOnMove(int fromPos,int toPos) {
-//        String prev = memoList.remove(fromPos);
-//        memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
-//        notifyItemMoved(fromPos, toPos);
+    public void mOnMove(int fromPos,int toPos) {
+        Memo prev =memoList.remove(fromPos);
+        memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
+        notifyItemMoved(fromPos, toPos);
+    }
+
+    //交换在数据库中的位置
+    public void exchangeData(int finalFromPos, int finalToPos) {
+        DBUtil.insertDataFromTo(memoList.get(finalFromPos).getId(),memoList.get(finalToPos).getId());
+
     }
 
 
@@ -77,12 +93,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    //删除一条内容
-    private void deleteData(int position) {
-        int memoId = memoList.get(position).getId();
-        DBUtil.deleteMemo(memoId);
 
-        memoList.remove(position);
-        notifyItemRemoved(position);
-    }
 }

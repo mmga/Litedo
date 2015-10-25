@@ -12,7 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -27,19 +29,19 @@ import com.mmga.litedo.db.Model.Memo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity{
 
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerViewAdapter mAdapter;
 
-    private FloatingActionButton fabAdd,fabSave;
+    private FloatingActionButton fabAdd;
     private List<Memo> memoList = new ArrayList<>();
 
-    private MySoundPool mSoundPool;
-
     private TextView noItemInfo;
+
+    private ArrayList<Integer> finalFromPos = new ArrayList<Integer>();
+    private ArrayList<Integer> finalToPos = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +53,16 @@ public class ListActivity extends AppCompatActivity {
 
         ItemTouchHelper.SimpleCallback callback =new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
                 //拖拽
-                final int fromPos = viewHolder.getAdapterPosition();
-                final int toPos = viewHolder.getAdapterPosition();
+                final int fromPos = source.getAdapterPosition();
+                final int toPos = target.getAdapterPosition();
+                Log.d("<<<<<", "" + fromPos + "+" + toPos);
+                finalFromPos.add(fromPos);
+                finalToPos.add(toPos);
+                mAdapter.mOnMove(fromPos, toPos);
                 return true;
 
                 //TODO
@@ -79,14 +86,33 @@ public class ListActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    if (finalFromPos.size() != 0 && finalToPos.size() != 0 && finalFromPos.get(0) != finalToPos.get(finalToPos.size() - 1)) {
+
+                        Log.d("<<<<<", "from = " + finalFromPos.get(0) + "-to = " + finalToPos.get(finalToPos.size() - 1));
+                        mAdapter.exchangeData(finalFromPos.get(0), finalToPos.get(finalToPos.size() - 1));
+                        finalFromPos.clear();
+                        finalToPos.clear();
+                    }
+
+                }
+                return false;
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fabSave = (FloatingActionButton) findViewById(R.id.fab_save);
+
+
         fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,17 +139,13 @@ public class ListActivity extends AppCompatActivity {
 
                             }
                         }, 250);
-
-//
-//                        loadData();
-//                        fabAdd.setVisibility(View.VISIBLE);
                     }
                 });
                 mDialog.show();
             }
         });
 
-        mSoundPool = new MySoundPool(ListActivity.this);
+        MySoundPool mSoundPool = new MySoundPool(ListActivity.this);
 
 
     }

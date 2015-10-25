@@ -5,9 +5,9 @@
     android:background="#ececec">
 
     <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:src="@drawable/litedo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/litedo72"
         android:layout_centerInParent="true"
         android:id="@+id/image_view"/>
     <!--<TextView-->
