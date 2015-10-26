@@ -5,7 +5,7 @@
     <application
         android:name="com.mmga.litedo.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/litedo"
+        android:icon="@mipmap/litedo172"
         android:label="@string/app_name"
         android:supportsRtl="true"
 

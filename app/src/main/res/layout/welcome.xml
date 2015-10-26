@@ -5,16 +5,10 @@
     android:background="#ececec">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="72dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/litedo72"
+        android:src="@drawable/litedo512"
         android:layout_centerInParent="true"
         android:id="@+id/image_view"/>
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" -->
-        <!--android:layout_alignBottom="@+id/image_view"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:text="@string/welcome"/>-->
 
 </RelativeLayout>

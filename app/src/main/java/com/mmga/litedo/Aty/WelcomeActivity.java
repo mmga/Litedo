@@ -45,10 +45,10 @@ public class WelcomeActivity extends Activity {
 
     private void initInfo() {
 
-        DBUtil.addMemo("右下角按钮添加新便签");
-        DBUtil.addMemo("滑动删除");
-        DBUtil.addMemo("长按置顶");
         DBUtil.addMemo("开始使用吧");
+        DBUtil.addMemo("滑动删除");
+        DBUtil.addMemo("长按拖动");
+        DBUtil.addMemo("右下角按钮添加新便签");
 
         goListAty();
 

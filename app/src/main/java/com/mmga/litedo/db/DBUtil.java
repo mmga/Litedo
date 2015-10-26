@@ -1,7 +1,5 @@
 package com.mmga.litedo.db;
 
-import android.util.Log;
-
 import com.mmga.litedo.db.Model.Memo;
 
 import org.litepal.crud.DataSupport;
@@ -51,42 +49,54 @@ public class DBUtil{
         return num;
     }
 
+    public static void exchangeMemo(int fromId, int toId) {
+
+        exchange(fromId, toId);
+    }
+
+    private static void exchange(int fromId, int toId) {
+        Memo fromMemo = DataSupport.find(Memo.class, fromId);
+        Memo toMemo = DataSupport.find(Memo.class, toId);
+        fromMemo.update(toId);
+        toMemo.update(fromId);
+    }
+
 
     /**
      * 拖拽source到target位置，修改数据库对应项
      * @param sourceId
      * @param targetId
      */
-    public static void insertDataFromTo(int sourceId, int targetId) {
-
-        //id大的往小的拖
-        if (sourceId > targetId) {
-            Log.d("<<<<<", "sourceID = " + sourceId + " -- targetID" + targetId);
-            for (int i = targetId; i < sourceId; i++) {
-                exchange(i, sourceId);
-            }
-
-        }
-        //id小的往大的拖
-        else {
-            for (int i = targetId; i > sourceId; i--) {
-                exchange(i, sourceId);
-            }
-        }
-
-    }
-
-    /**
-     * 交换两行数据
-     * @param smallId
-     * @param bigId
-     */
-    private static void exchange(int smallId, int bigId) {
-        Memo smallMemo = DataSupport.find(Memo.class, smallId);
-        Memo bigMemo = DataSupport.find(Memo.class, bigId);
-        bigMemo.update(smallId);
-        smallMemo.update(bigId);
-    }
+//    public static void insertDataFromTo(int sourceId, int targetId) {
+//
+//        //id大的往小的拖
+//        if (sourceId > targetId) {
+//
+//            for (int i = targetId; i < sourceId; i++) {
+//                exchange(i, sourceId);
+//            }
+//
+//        }
+//        //id小的往大的拖
+//        else {
+//            for (int i = targetId; i > sourceId; i--) {
+//                exchange(i, sourceId);
+//            }
+//        }
+//
+//    }
+//
+//    /**
+//     * 交换两行数据
+//     * @param smallId
+//     * @param bigId
+//     */
+//    private static void exchange(int smallId, int bigId) {
+//        Memo smallMemo = DataSupport.find(Memo.class, smallId);
+//        Memo bigMemo = DataSupport.find(Memo.class, bigId);
+//        bigMemo.update(smallId);
+//        smallMemo.update(bigId);
+//    }
 
 
 }
