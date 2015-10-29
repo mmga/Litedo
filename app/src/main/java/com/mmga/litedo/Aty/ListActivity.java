@@ -70,7 +70,7 @@ public class ListActivity extends AppCompatActivity{
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 mAdapter.mOnSwiped(viewHolder);
-                if (DBUtil.getMemoNum() == 0) {
+                if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setVisibility(View.GONE);
                     noItemInfo.setVisibility(View.VISIBLE);
                 }
@@ -179,7 +179,7 @@ public class ListActivity extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu,menu);
         return true;
     }
 
@@ -198,7 +198,9 @@ public class ListActivity extends AppCompatActivity{
 
     @Override
     protected void onPause() {
-        mAdapter.syncMemo();
+        if (mAdapter!=null) {
+            mAdapter.syncMemo();
+        }
         super.onPause();
         LogUtil.d("<<<<<","onPause");
     }

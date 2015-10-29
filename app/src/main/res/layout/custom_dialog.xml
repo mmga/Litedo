@@ -13,6 +13,7 @@
         android:layout_height="50dp"
         android:layout_weight="9"
         android:textSize="25sp"
+        android:maxLength="24"
         android:textColor="#464646"
         android:id="@+id/edit_text"
         style="@style/custom_edittext_style"

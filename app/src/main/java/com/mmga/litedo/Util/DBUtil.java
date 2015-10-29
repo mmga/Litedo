@@ -77,7 +77,7 @@ public class DBUtil {
             return;
         }else{
             LogUtil.d("<<<<<", "" + memoList.size());
-            for (int i = 0; i < memoList.size(); i++) {
+            for (int i = memoList.size() - 1; i >= 0; i--) {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());
                 mList.add(mMemo);

@@ -3,18 +3,15 @@ package com.mmga.litedo.Widget;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 
@@ -51,9 +48,9 @@ public class CustomDialogAty extends Activity{
         window.setAttributes(layoutParams);
 
         //打开软键盘
-        InputMethodManager inputMethodManager = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_FORCED);
-        Log.d(">>>>>", "1");
+//        InputMethodManager inputMethodManager = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_FORCED);
+//        Log.d(">>>>>", "1");
 
         //设置默认输入法为中文
         mEditText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
