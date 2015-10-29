@@ -4,4 +4,8 @@
     <string name="edittext_hint">打算做点什么</string>
     <string name="welcome">Litedo-Like to do</string>
     <string name="no_item_info">任务完成，一身轻松( • ̀ω•́ )</string>
+    <string name="Litedo">Litedo--Like to do</string>
+    <string name="github">github:https://github.com/mmga/Litedo</string>
+    <string name="author">开发者：@mmga</string>
+    <string name="version">beta v0.5</string>
 </resources>

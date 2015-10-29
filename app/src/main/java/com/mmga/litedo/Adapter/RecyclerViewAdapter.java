@@ -1,7 +1,6 @@
 package com.mmga.litedo.Adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,11 @@ import android.widget.TextView;
 
 import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
-import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.db.Model.Memo;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -62,36 +63,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         DBUtil.deleteMemo(memoList.get(position).getId());
         memoList.remove(position);
         notifyItemRemoved(position);
-        Log.d("<<<<<", "迷之删除");
     }
 
 //    拖拽
     public void mOnMove(int fromPos,int toPos) {
 
-        if (fromPos - toPos > 1) {
-            for (int i = fromPos; i > toPos; i--){
-                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i - 1).getId());
-            }
-        }else if (toPos - fromPos > 1) {
+        LogUtil.d("<<<<<","id = " + memoList.get(fromPos).getId() +" + "+memoList.get(toPos).getId());
+        DBUtil.exchangeMemo(memoList.get(fromPos).getId(),memoList.get(toPos).getId());
+
+        if (fromPos < toPos) {
             for (int i = fromPos; i < toPos; i++) {
-                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i + 1).getId());
+                Collections.swap(memoList, i, i + 1);
             }
-        }else {
-            DBUtil.exchangeMemo(memoList.get(fromPos).getId(),  memoList.get(toPos).getId());
-            Memo prev = memoList.remove(fromPos);
-            memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
-            notifyItemMoved(fromPos, toPos);
+        } else {
+            for (int i = fromPos; i > toPos; i--) {
+                Collections.swap(memoList, i, i - 1);
+            }
         }
+        notifyItemMoved(fromPos, toPos);
+
+
+//        if (fromPos - toPos > 1) {
+//            for (int i = fromPos; i > toPos; i--){
+//                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i - 1).getId());
+//            }
+//        }else if (toPos - fromPos > 1) {
+//            for (int i = fromPos; i < toPos; i++) {
+//                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i + 1).getId());
+//            }
+//        }else {
+//            DBUtil.exchangeMemo(memoList.get(fromPos).getId(),  memoList.get(toPos).getId());
+//            Memo prev = memoList.remove(fromPos);
+//            memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
+//            notifyItemMoved(fromPos, toPos);
+//        }
 
 
     }
-
-    //交换在数据库中的位置
-//    public void exchangeData(int finalFromPos, int finalToPos) {
-//        Log.d("<<<<<", "1sourceID =" + memoList.get(finalFromPos).getId() + " -- targetID =" + memoList.get(finalToPos).getId());
-//        DBUtil.insertDataFromTo(memoList.get(finalFromPos).getId(), memoList.get(finalToPos).getId());
-//
-//    }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{

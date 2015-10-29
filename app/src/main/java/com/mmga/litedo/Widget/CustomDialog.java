@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 
 import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
-import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.Util.DBUtil;
 
 /**
  * Created by mmga on 2015/10/22.

@@ -12,17 +12,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
-import com.mmga.litedo.Widget.CustomDialog;
 import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
-import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.Util.LogUtil;
+import com.mmga.litedo.Widget.CustomDialog;
 import com.mmga.litedo.db.Model.Memo;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class ListActivity extends AppCompatActivity{
                 //拖拽
                 final int fromPos = source.getAdapterPosition();
                 final int toPos = target.getAdapterPosition();
-                Log.d("<<<<<", "" + fromPos + "+" + toPos);
+                LogUtil.d("<<<<<", "" + fromPos + "+" + toPos);
                 mAdapter.mOnMove(fromPos, toPos);
                 return true;
 
@@ -85,30 +85,6 @@ public class ListActivity extends AppCompatActivity{
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-//        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//
-//                    if (finalFromPos.size() != 0 && finalToPos.size() != 0 && finalFromPos.get(0) != finalToPos.get(finalToPos.size() - 1)) {
-//
-//                        Log.d("<<<<<", "1from = " + finalFromPos.get(0) + "-to = " + finalToPos.get(finalToPos.size() - 1));
-//                        if (finalFromPos.get(0) < finalToPos.get(finalToPos.size() - 1)) {
-//                            mAdapter.exchangeData(finalFromPos.get(0), finalToPos.get(finalToPos.size() - 1));
-//                        } else {
-//                            mAdapter.exchangeData(finalToPos.get(finalToPos.size() - 1), finalFromPos.get(0));
-//                        }
-//
-//
-//
-//                        finalFromPos.clear();
-//                        finalToPos.clear();
-//                    }
-//
-//                }
-//                return false;
-//            }
-//        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

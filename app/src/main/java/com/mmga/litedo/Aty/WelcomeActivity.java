@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mmga.litedo.R;
-import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.Util.DBUtil;
 
 /**
  * Created by mmga on 2015/10/23.
