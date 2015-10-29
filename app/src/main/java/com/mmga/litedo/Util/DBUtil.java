@@ -4,10 +4,15 @@ import com.mmga.litedo.db.Model.Memo;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class DBUtil {
+
+    private static List<Memo> mList = new ArrayList<>();
+//    private static Memo mMemo = null;
+
 
     /**
      * 增加一个新的任务
@@ -17,7 +22,7 @@ public class DBUtil {
     public static void addMemo(String content) {
         Memo memo = new Memo();
         memo.setContent("" + content);
-        memo.setIsDone(0);
+        memo.setCount(1);
         memo.save();
     }
 
@@ -28,7 +33,7 @@ public class DBUtil {
      */
     public static void deleteMemo(int memoId) {
         Memo memoToUpdate = new Memo();
-        memoToUpdate.setIsDone(1);
+        memoToUpdate.setCount(0);
         memoToUpdate.update(memoId);
     }
 
@@ -38,8 +43,8 @@ public class DBUtil {
      * @return
      */
     public static List getAllMemo() {
-        return DataSupport.where("isDone = ?", "0")
-//                .order("id desc")
+        return DataSupport.where("count > ?", "0")
+                .order("id desc")
                 .find(Memo.class);
     }
 
@@ -49,7 +54,7 @@ public class DBUtil {
      * @return
      */
     public static int getMemoNum() {
-        int num = DataSupport.where("isDone = ?", "0").count(Memo.class);
+        int num = DataSupport.where("count > ?", "0").count(Memo.class);
         return num;
     }
 
@@ -68,7 +73,21 @@ public class DBUtil {
 
     public static void syncData(List<Memo> memoList) {
 
+        if (memoList == null) {
+            return;
+        }else{
+            LogUtil.d("<<<<<", "" + memoList.size());
+            for (int i = 0; i < memoList.size(); i++) {
+                Memo mMemo = new Memo();
+                mMemo.setContent(memoList.get(i).getContent());
+                mList.add(mMemo);
+            }
+            DataSupport.deleteAll(Memo.class);
+            DataSupport.saveAll(mList);
+            mList.clear();
 
+
+        }
 
     }
 

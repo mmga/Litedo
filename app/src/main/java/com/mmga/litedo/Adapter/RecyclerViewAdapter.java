@@ -9,17 +9,13 @@ import android.widget.TextView;
 import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
-import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.db.Model.Memo;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.Collections;
 import java.util.List;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-
 
 
     private List<Memo> memoList;
@@ -62,18 +58,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //删除一条内容
     private void deleteData(int position) {
-        DBUtil.deleteMemo(memoList.get(position).getId());
+//        DBUtil.deleteMemo(memoList.get(position).getId());
         memoList.remove(position);
         notifyItemRemoved(position);
     }
 
 //    拖拽
     public void mOnMove(int fromPos,int toPos) {
-        Memo tempMemo = new Memo();
-        tempMemo = DataSupport.where("content = ?", memoList.get(fromPos).getContent()).find(Memo.class).get(0);
-
-        LogUtil.d("<<<<<", "id = " + tempMemo.getId() + " + " + memoList.get(toPos).getId());
-        DBUtil.exchangeMemo(tempMemo.getId(), memoList.get(toPos).getId());
+//        Memo tempMemo = new Memo();
+//        tempMemo = DataSupport.where("content = ?", memoList.get(fromPos).getContent()).find(Memo.class).get(0);
+//
+//        LogUtil.d("<<<<<", "id = " + tempMemo.getId() + " + " + memoList.get(toPos).getId());
+//        DBUtil.exchangeMemo(tempMemo.getId(), memoList.get(toPos).getId());
 
 
 
@@ -105,6 +101,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //        }
 
 
+    }
+
+    public void syncMemo() {
+            DBUtil.syncData(memoList);
     }
 
 

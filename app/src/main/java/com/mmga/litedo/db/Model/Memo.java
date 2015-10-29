@@ -11,7 +11,7 @@ public class Memo extends DataSupport{
 
     private String content;
 
-    private int isDone = 0;
+    private int count = 1;
 
 
 
@@ -32,11 +32,11 @@ public class Memo extends DataSupport{
         this.content = content;
     }
 
-    public int getIsDone() {
-        return isDone;
+    public int getCount() {
+        return count;
     }
 
-    public void setIsDone(int isDone) {
-        this.isDone = isDone;
+    public void setCount(int count) {
+        this.count = count;
     }
 }

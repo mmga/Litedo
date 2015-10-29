@@ -18,10 +18,7 @@ import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 
-/**
- * Created by mmga on 2015/10/29.
- */
-public class CustomDialogAty extends Activity {
+public class CustomDialogAty extends Activity{
 
     private EditText mEditText;
     private Context mContext;
@@ -43,8 +40,8 @@ public class CustomDialogAty extends Activity {
         mButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBUtil.addMemo(mEditText.getText().toString());
-                finish();
+
+                saveMemo();
             }
         });
 
@@ -68,8 +65,7 @@ public class CustomDialogAty extends Activity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    DBUtil.addMemo(mEditText.getText().toString());
-                    finish();
+                    saveMemo();
                     return true;
                 }
                 return false;
@@ -83,6 +79,11 @@ public class CustomDialogAty extends Activity {
 
     }
 
+    private void saveMemo() {
+
+        DBUtil.addMemo(mEditText.getText().toString());
+        finish();
+    }
 
 
 }

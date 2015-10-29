@@ -158,7 +158,6 @@ public class ListActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        loadData();
     }
 
     public static final int UPDATE_UI = 1;
@@ -199,14 +198,14 @@ public class ListActivity extends AppCompatActivity{
 
     @Override
     protected void onPause() {
+        mAdapter.syncMemo();
         super.onPause();
         LogUtil.d("<<<<<","onPause");
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-        //                        延时更新UI
+        //      延时更新UI
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -216,7 +215,8 @@ public class ListActivity extends AppCompatActivity{
 
             }
         }, 250);
-        LogUtil.d("<<<<<","onResume");
+        LogUtil.d("<<<<<", "onResume");
+        super.onResume();
     }
 
     @Override
