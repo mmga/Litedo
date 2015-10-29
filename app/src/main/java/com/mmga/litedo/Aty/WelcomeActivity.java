@@ -15,7 +15,7 @@ import com.mmga.litedo.Util.DBUtil;
  */
 public class WelcomeActivity extends Activity {
 
-    private final int TIME_DELAY = 1000;
+    private final int TIME_DELAY = 300;
 
     private boolean isFirstIn = false;
 

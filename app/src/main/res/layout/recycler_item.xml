@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ededed">
 
-        <com.mmga.litedo.Widget.CustomTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:textSize="24sp"

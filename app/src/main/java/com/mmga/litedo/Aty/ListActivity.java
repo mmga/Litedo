@@ -2,6 +2,7 @@ package com.mmga.litedo.Aty;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Widget.CustomDialog;
+import com.mmga.litedo.Widget.CustomDialogAty;
 import com.mmga.litedo.db.Model.Memo;
 
 import java.util.ArrayList;
@@ -97,29 +101,9 @@ public class ListActivity extends AppCompatActivity{
             public void onClick(View view) {
                 MySoundPool.playSoundAdd();
                 fabAdd.setVisibility(View.GONE);
-                Dialog mDialog = new CustomDialog(ListActivity.this);
-                //设置dialog的位置
-                Window dialogWindow = mDialog.getWindow();
-                dialogWindow.setGravity(Gravity.BOTTOM);
-
-                mDialog.setCanceledOnTouchOutside(true);
-                //对话框消失时刷新数据
-                mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-//                        延时更新UI
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Message message = new Message();
-                                message.what = UPDATE_UI;
-                                handler.sendMessage(message);
-
-                            }
-                        }, 250);
-                    }
-                });
-                mDialog.show();
+//                showDialog();
+                Intent i = new Intent(ListActivity.this, CustomDialogAty.class);
+                startActivity(i);
             }
         });
 
@@ -128,6 +112,32 @@ public class ListActivity extends AppCompatActivity{
 
     }
 
+    //弹出dialog
+    private void showDialog() {
+        Dialog mDialog = new CustomDialog(ListActivity.this);
+        //设置dialog的位置
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+
+        mDialog.setCanceledOnTouchOutside(true);
+        //对话框消失时刷新数据
+        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+//                        延时更新UI
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Message message = new Message();
+                        message.what = UPDATE_UI;
+                        handler.sendMessage(message);
+
+                    }
+                }, 250);
+            }
+        });
+        mDialog.show();
+    }
 
 
     //读取数据库，刷新列表
@@ -168,6 +178,52 @@ public class ListActivity extends AppCompatActivity{
     };
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.aboutMenuItem:
+                Intent i = new Intent(ListActivity.this, AboutActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtil.d("<<<<<","onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //                        延时更新UI
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = UPDATE_UI;
+                handler.sendMessage(message);
+
+            }
+        }, 250);
+        LogUtil.d("<<<<<","onResume");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        LogUtil.d("<<<<<","onRestart");
+    }
 }
 
 

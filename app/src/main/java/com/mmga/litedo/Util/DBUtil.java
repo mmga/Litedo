@@ -7,13 +7,14 @@ import org.litepal.crud.DataSupport;
 import java.util.List;
 
 
-public class DBUtil{
+public class DBUtil {
 
     /**
      * 增加一个新的任务
+     *
      * @param content
      */
-    public static void addMemo(String content){
+    public static void addMemo(String content) {
         Memo memo = new Memo();
         memo.setContent("" + content);
         memo.setIsDone(0);
@@ -22,9 +23,10 @@ public class DBUtil{
 
     /**
      * 将isDone标记为1，代表已完成的任务
+     *
      * @param memoId
      */
-    public static void deleteMemo(int memoId){
+    public static void deleteMemo(int memoId) {
         Memo memoToUpdate = new Memo();
         memoToUpdate.setIsDone(1);
         memoToUpdate.update(memoId);
@@ -32,6 +34,7 @@ public class DBUtil{
 
     /**
      * 按照id倒序查找数据
+     *
      * @return
      */
     public static List getAllMemo() {
@@ -42,6 +45,7 @@ public class DBUtil{
 
     /**
      * 获得应显示的memo数量
+     *
      * @return
      */
     public static int getMemoNum() {
@@ -62,7 +66,10 @@ public class DBUtil{
     }
 
 
+    public static void syncData(List<Memo> memoList) {
 
 
+
+    }
 
 }

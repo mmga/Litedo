@@ -12,6 +12,8 @@ import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.db.Model.Memo;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.mTextView.setText(memoList.get(position).getContent()+memoList.get(position).getId());
+        holder.mTextView.setText(memoList.get(position).getContent());
         holder.recyclerViewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,9 +69,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 //    拖拽
     public void mOnMove(int fromPos,int toPos) {
+        Memo tempMemo = new Memo();
+        tempMemo = DataSupport.where("content = ?", memoList.get(fromPos).getContent()).find(Memo.class).get(0);
 
-        LogUtil.d("<<<<<","id = " + memoList.get(fromPos).getId() +" + "+memoList.get(toPos).getId());
-        DBUtil.exchangeMemo(memoList.get(fromPos).getId(),memoList.get(toPos).getId());
+        LogUtil.d("<<<<<", "id = " + tempMemo.getId() + " + " + memoList.get(toPos).getId());
+        DBUtil.exchangeMemo(tempMemo.getId(), memoList.get(toPos).getId());
+
+
 
         if (fromPos < toPos) {
             for (int i = fromPos; i < toPos; i++) {

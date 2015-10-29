@@ -1,11 +1,14 @@
 package com.mmga.litedo.Widget;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,26 +19,13 @@ import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 
 /**
- * Created by mmga on 2015/10/22.
+ * Created by mmga on 2015/10/29.
  */
-public class CustomDialog extends Dialog {
+public class CustomDialogAty extends Activity {
 
     private EditText mEditText;
     private Context mContext;
     private ImageButton mButtonOk;
-
-    public CustomDialog(Context context) {
-        this(context, R.style.CustomDialog);
-        mContext = context;
-    }
-
-    public CustomDialog(Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
-    public CustomDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +44,14 @@ public class CustomDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 DBUtil.addMemo(mEditText.getText().toString());
-                dismiss();
+                finish();
             }
         });
+
+        Window window = this.getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.gravity = Gravity.BOTTOM;
+        window.setAttributes(layoutParams);
 
         //打开软键盘
         InputMethodManager inputMethodManager = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -74,7 +69,7 @@ public class CustomDialog extends Dialog {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                     DBUtil.addMemo(mEditText.getText().toString());
-                    dismiss();
+                    finish();
                     return true;
                 }
                 return false;
@@ -89,4 +84,8 @@ public class CustomDialog extends Dialog {
     }
 
 
+
 }
+
+
+
