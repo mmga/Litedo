@@ -11,15 +11,13 @@ import java.util.List;
 public class DBUtil {
 
     private static List<Memo> mList = new ArrayList<>();
-//    private static Memo mMemo = null;
-
 
     /**
      * 增加一个新的任务
      *
      * @param content
      */
-    public static void addMemo(String content) {
+    public static void addData(String content) {
         Memo memo = new Memo();
         memo.setContent("" + content);
         memo.setCount(1);
@@ -27,22 +25,11 @@ public class DBUtil {
     }
 
     /**
-     * 将isDone标记为1，代表已完成的任务
-     *
-     * @param memoId
-     */
-    public static void deleteMemo(int memoId) {
-        Memo memoToUpdate = new Memo();
-        memoToUpdate.setCount(0);
-        memoToUpdate.update(memoId);
-    }
-
-    /**
      * 按照id倒序查找数据
      *
      * @return
      */
-    public static List getAllMemo() {
+    public static List getAllData() {
         return DataSupport.where("count > ?", "0")
                 .order("id desc")
                 .find(Memo.class);
@@ -53,24 +40,15 @@ public class DBUtil {
      *
      * @return
      */
-    public static int getMemoNum() {
+    public static int getDataNum() {
         int num = DataSupport.where("count > ?", "0").count(Memo.class);
         return num;
     }
 
-    public static void exchangeMemo(int fromId, int toId) {
-
-        exchange(fromId, toId);
-    }
-
-    private static void exchange(int fromId, int toId) {
-        Memo fromMemo = DataSupport.find(Memo.class, fromId);
-        Memo toMemo = DataSupport.find(Memo.class, toId);
-        fromMemo.update(toId);
-        toMemo.update(fromId);
-    }
-
-
+    /**
+     * 同步list的数据至数据库
+     * @param memoList
+     */
     public static void syncData(List<Memo> memoList) {
 
         if (memoList == null) {
@@ -85,10 +63,7 @@ public class DBUtil {
             DataSupport.deleteAll(Memo.class);
             DataSupport.saveAll(mList);
             mList.clear();
-
-
         }
-
     }
 
 }

@@ -1,7 +1,5 @@
 package com.mmga.litedo.Aty;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,11 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
@@ -25,11 +21,9 @@ import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.LogUtil;
-import com.mmga.litedo.Widget.CustomDialog;
 import com.mmga.litedo.Widget.CustomDialogAty;
 import com.mmga.litedo.db.Model.Memo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity{
@@ -39,7 +33,6 @@ public class ListActivity extends AppCompatActivity{
     private RecyclerViewAdapter mAdapter;
 
     private FloatingActionButton fabAdd;
-    private List<Memo> memoList = new ArrayList<>();
 
     private TextView noItemInfo;
 
@@ -63,8 +56,6 @@ public class ListActivity extends AppCompatActivity{
                 LogUtil.d("<<<<<", "" + fromPos + "+" + toPos);
                 mAdapter.mOnMove(fromPos, toPos);
                 return true;
-
-                //TODO
             }
 
             @Override
@@ -82,18 +73,14 @@ public class ListActivity extends AppCompatActivity{
 
     private void init() {
         noItemInfo = (TextView) findViewById(R.id.no_item_info);
-
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +88,6 @@ public class ListActivity extends AppCompatActivity{
             public void onClick(View view) {
                 MySoundPool.playSoundAdd();
                 fabAdd.setVisibility(View.GONE);
-//                showDialog();
                 Intent i = new Intent(ListActivity.this, CustomDialogAty.class);
                 startActivity(i);
             }
@@ -112,52 +98,20 @@ public class ListActivity extends AppCompatActivity{
 
     }
 
-    //弹出dialog
-    private void showDialog() {
-        Dialog mDialog = new CustomDialog(ListActivity.this);
-        //设置dialog的位置
-        Window dialogWindow = mDialog.getWindow();
-        dialogWindow.setGravity(Gravity.BOTTOM);
-
-        mDialog.setCanceledOnTouchOutside(true);
-        //对话框消失时刷新数据
-        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-//                        延时更新UI
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Message message = new Message();
-                        message.what = UPDATE_UI;
-                        handler.sendMessage(message);
-
-                    }
-                }, 250);
-            }
-        });
-        mDialog.show();
-    }
-
 
     //读取数据库，刷新列表
     private void loadData() {
-        if (DBUtil.getMemoNum() == 0) {
+        if (DBUtil.getDataNum() == 0) {
             mRecyclerView.setVisibility(View.GONE);
             noItemInfo.setVisibility(View.VISIBLE);
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
             noItemInfo.setVisibility(View.GONE);
-            memoList = DBUtil.getAllMemo();
+            List<Memo> memoList = DBUtil.getAllData();
             mAdapter = new RecyclerViewAdapter(memoList);
             mRecyclerView.setAdapter(mAdapter);
 
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     public static final int UPDATE_UI = 1;

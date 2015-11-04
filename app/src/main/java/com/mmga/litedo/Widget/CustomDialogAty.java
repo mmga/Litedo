@@ -78,7 +78,7 @@ public class CustomDialogAty extends Activity{
 
     private void saveMemo() {
 
-        DBUtil.addMemo(mEditText.getText().toString());
+        DBUtil.addData(mEditText.getText().toString());
         finish();
     }
 

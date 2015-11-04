@@ -25,7 +25,7 @@ public class MySoundPool {
     }
 
     public static void playSoundAdd() {
-        soundPool.play(soundAdd, 0.3f, 0.3f, 0, 0, 1.0f);
+        soundPool.play(soundAdd, 0.1f, 0.1f, 0, 0, 1.0f);
         Log.d(">>>>>", "soundadd");
 
 
@@ -33,7 +33,7 @@ public class MySoundPool {
     }
 
     public static void playSoundDelete() {
-        soundPool.play(soundDelete, 0.3f, 0.3f, 0, 0, 1.0f);
+        soundPool.play(soundDelete, 0.1f, 0.1f, 0, 0, 1.0f);
         Log.d(">>>>>", "sounddelete");
 
     }

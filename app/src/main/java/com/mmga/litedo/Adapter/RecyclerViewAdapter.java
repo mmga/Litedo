@@ -58,20 +58,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //删除一条内容
     private void deleteData(int position) {
-//        DBUtil.deleteMemo(memoList.get(position).getId());
         memoList.remove(position);
         notifyItemRemoved(position);
     }
 
 //    拖拽
     public void mOnMove(int fromPos,int toPos) {
-//        Memo tempMemo = new Memo();
-//        tempMemo = DataSupport.where("content = ?", memoList.get(fromPos).getContent()).find(Memo.class).get(0);
-//
-//        LogUtil.d("<<<<<", "id = " + tempMemo.getId() + " + " + memoList.get(toPos).getId());
-//        DBUtil.exchangeMemo(tempMemo.getId(), memoList.get(toPos).getId());
-
-
 
         if (fromPos < toPos) {
             for (int i = fromPos; i < toPos; i++) {

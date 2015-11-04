@@ -10,12 +10,10 @@ import android.os.Message;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 
-/**
- * Created by mmga on 2015/10/23.
- */
+
 public class WelcomeActivity extends Activity {
 
-    private final int TIME_DELAY = 300;
+    private final int TIME_DELAY = 500;
 
     private boolean isFirstIn = false;
 
@@ -40,15 +38,16 @@ public class WelcomeActivity extends Activity {
     private void goListAty() {
         Intent i = new Intent(WelcomeActivity.this, ListActivity.class);
         startActivity(i);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 
     private void initInfo() {
 
-        DBUtil.addMemo("开始使用吧");
-        DBUtil.addMemo("滑动删除");
-        DBUtil.addMemo("长按拖动");
-        DBUtil.addMemo("右下角按钮添加新便签");
+        DBUtil.addData("开始使用吧");
+        DBUtil.addData("滑动删除");
+        DBUtil.addData("长按拖动");
+        DBUtil.addData("右下角按钮添加新便签");
 
         goListAty();
 

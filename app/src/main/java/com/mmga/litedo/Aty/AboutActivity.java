@@ -5,10 +5,8 @@ import android.os.Bundle;
 
 import com.mmga.litedo.R;
 
-/**
- * Created by mmga on 2015/10/29.
- */
 public class AboutActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
