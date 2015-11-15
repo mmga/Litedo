@@ -186,7 +186,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtil.d("<<<<<","onRestart");
+        LogUtil.d("<<<<<", "onRestart");
     }
 
 
@@ -196,7 +196,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         mItemText = (TextView) view.findViewById(R.id.fg_view);
         mItemMenu = (ImageView)view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
-            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,30)).start();
+            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,20)).start();
             mItemMenu.setVisibility(View.VISIBLE);
             mItemMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -210,6 +210,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
 
     }
+
+
 }
 
 
