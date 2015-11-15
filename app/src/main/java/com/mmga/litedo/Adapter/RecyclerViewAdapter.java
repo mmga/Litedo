@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -15,8 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener{
 
+
+
+    //定义接口
+    public static interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view,String data);
+    }
+
+    private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
 
     private List<Memo> memoList;
 
@@ -29,20 +37,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_item, parent, false);
         MyViewHolder vh = new MyViewHolder(view);
+        //将创建的View注册点击事件
+        view.setOnClickListener(this);
         return vh;
     }
+
+
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.mTextView.setText(memoList.get(position).getContent());
-        holder.recyclerViewItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        holder.recyclerViewItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //item的点击事件
+//            }
+//        });
+        holder.itemView.setTag(memoList.get(position).getContent());
 
-                //item的点击事件
-            }
-        });
+    }
 
+    @Override
+    public void onClick(View v) {
+        if (mOnRecyclerViewItemClickListener != null) {
+            mOnRecyclerViewItemClickListener.onItemClick(v, (String) v.getTag());
+        }
+    }
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnRecyclerViewItemClickListener = listener;
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position, List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
     }
 
     @Override
@@ -53,7 +82,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //滑动删除
     public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
         deleteData(viewHolder.getAdapterPosition());
-        MySoundPool.playSoundDelete();
     }
 
     //删除一条内容
@@ -77,22 +105,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyItemMoved(fromPos, toPos);
 
 
-//        if (fromPos - toPos > 1) {
-//            for (int i = fromPos; i > toPos; i--){
-//                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i - 1).getId());
-//            }
-//        }else if (toPos - fromPos > 1) {
-//            for (int i = fromPos; i < toPos; i++) {
-//                DBUtil.exchangeMemo(memoList.get(i).getId(), memoList.get(i + 1).getId());
-//            }
-//        }else {
-//            DBUtil.exchangeMemo(memoList.get(fromPos).getId(),  memoList.get(toPos).getId());
-//            Memo prev = memoList.remove(fromPos);
-//            memoList.add(toPos > fromPos ? toPos - 1 : toPos, prev);
-//            notifyItemMoved(fromPos, toPos);
-//        }
-
-
     }
 
     public void syncMemo() {
@@ -104,13 +116,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public TextView mTextView;
         public View recyclerViewItem;
+        public ImageView itemMenu;
 
+        public ImageView getItemMenu() {
+            return itemMenu;
+        }
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            mTextView = (TextView) itemView.findViewById(R.id.text_view);
+            mTextView = (TextView) itemView.findViewById(R.id.fg_view);
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
+            itemMenu = (ImageView) itemView.findViewById(R.id.item_menu);
         }
     }
 

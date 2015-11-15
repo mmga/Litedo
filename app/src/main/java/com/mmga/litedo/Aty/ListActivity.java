@@ -14,19 +14,20 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
-import com.mmga.litedo.MySoundPool;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Widget.CustomDialogAty;
-import com.mmga.litedo.db.Model.Memo;
 
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity{
+public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener{
 
 
     private RecyclerView mRecyclerView;
@@ -35,6 +36,12 @@ public class ListActivity extends AppCompatActivity{
     private FloatingActionButton fabAdd;
 
     private TextView noItemInfo;
+
+    private List memoList;
+
+    private TextView mItemText;
+    private ImageView mItemMenu;
+
 
 
     @Override
@@ -46,7 +53,7 @@ public class ListActivity extends AppCompatActivity{
 
 
         ItemTouchHelper.SimpleCallback callback =new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
@@ -66,12 +73,14 @@ public class ListActivity extends AppCompatActivity{
                     noItemInfo.setVisibility(View.VISIBLE);
                 }
             }
+
         };
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void init() {
+
         noItemInfo = (TextView) findViewById(R.id.no_item_info);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -86,14 +95,11 @@ public class ListActivity extends AppCompatActivity{
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MySoundPool.playSoundAdd();
                 fabAdd.setVisibility(View.GONE);
                 Intent i = new Intent(ListActivity.this, CustomDialogAty.class);
                 startActivity(i);
             }
         });
-
-        MySoundPool mSoundPool = new MySoundPool(ListActivity.this);
 
 
     }
@@ -107,9 +113,11 @@ public class ListActivity extends AppCompatActivity{
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
             noItemInfo.setVisibility(View.GONE);
-            List<Memo> memoList = DBUtil.getAllData();
+
+            memoList = DBUtil.getAllData();
             mAdapter = new RecyclerViewAdapter(memoList);
             mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(this);
 
         }
     }
@@ -179,6 +187,28 @@ public class ListActivity extends AppCompatActivity{
     protected void onRestart() {
         super.onRestart();
         LogUtil.d("<<<<<","onRestart");
+    }
+
+
+    //点击item弹出菜单
+    @Override
+    public void onItemClick(final View view, String data) {
+        mItemText = (TextView) view.findViewById(R.id.fg_view);
+        mItemMenu = (ImageView)view.findViewById(R.id.item_menu);
+        if (mItemMenu.getVisibility() == View.GONE) {
+            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,30)).start();
+            mItemMenu.setVisibility(View.VISIBLE);
+            mItemMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(ListActivity.this, "btn" + mItemText.getText(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mItemText.animate().translationX(0).start();
+            mItemMenu.setVisibility(View.GONE);
+        }
+
     }
 }
 
