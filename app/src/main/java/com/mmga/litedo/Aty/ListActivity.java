@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.R;
@@ -87,6 +86,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+// ListActivity.this, DividerItemDecoration.VERTICAL_LIST));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -192,7 +193,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     //点击item弹出菜单
     @Override
-    public void onItemClick(final View view, String data) {
+    public void onItemClick(final View view, final String data, final int id) {
         mItemText = (TextView) view.findViewById(R.id.fg_view);
         mItemMenu = (ImageView)view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
@@ -201,7 +202,10 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             mItemMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(ListActivity.this, "btn" + mItemText.getText(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ListActivity.this, CustomDialogAty.class);
+                    intent.putExtra("data", data);
+                    intent.putExtra("dataID", id);
+                    startActivity(intent);
                 }
             });
         } else {

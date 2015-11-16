@@ -24,6 +24,18 @@ public class DBUtil {
         memo.save();
     }
 
+    public static void updateData(String content,int id) {
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put("content", content);
+        LogUtil.d("mEditText", content);
+        LogUtil.d("id", "" + id);
+//        DataSupport.update(Memo.class, contentValues, id);
+        Memo memo = new Memo();
+        memo.setContent(content);
+        memo.update(id);
+    }
+
+
     /**
      * 按照id倒序查找数据
      *

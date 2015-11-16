@@ -21,12 +21,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //定义接口
     public static interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view,String data);
+        void onItemClick(View view,String data,int id);
     }
 
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
 
-    private List<Memo> memoList;
+    private static List<Memo> memoList;
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -42,26 +42,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return vh;
     }
 
-
+    public static List<Memo> getMemoList() {
+        return memoList;
+    }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.mTextView.setText(memoList.get(position).getContent());
-//        holder.recyclerViewItem.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                //item的点击事件
-//            }
-//        });
-        holder.itemView.setTag(memoList.get(position).getContent());
+        holder.itemView.setTag(R.id.tag_first, memoList.get(position).getContent());
+        holder.itemView.setTag(R.id.tag_second, position);
+
 
     }
 
     @Override
     public void onClick(View v) {
         if (mOnRecyclerViewItemClickListener != null) {
-            mOnRecyclerViewItemClickListener.onItemClick(v, (String) v.getTag());
+            mOnRecyclerViewItemClickListener.onItemClick(v,
+                    (String) v.getTag(R.id.tag_first), (Integer) v.getTag(R.id.tag_second));
         }
     }
 
@@ -82,6 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //滑动删除
     public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
         deleteData(viewHolder.getAdapterPosition());
+
     }
 
     //删除一条内容
@@ -107,6 +106,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+
     public void syncMemo() {
             DBUtil.syncData(memoList);
     }
@@ -117,10 +117,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView mTextView;
         public View recyclerViewItem;
         public ImageView itemMenu;
-
-        public ImageView getItemMenu() {
-            return itemMenu;
-        }
 
         public MyViewHolder(View itemView) {
             super(itemView);
