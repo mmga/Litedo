@@ -21,7 +21,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //定义接口
     public static interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view,String data,int id);
+        void onItemClick(View view,String data,MyViewHolder viewHolder);
     }
 
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
@@ -42,15 +42,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return vh;
     }
 
-    public static List<Memo> getMemoList() {
-        return memoList;
-    }
-
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.mTextView.setText(memoList.get(position).getContent());
+        holder.mTextView.setText(memoList.get(position).getContent() + "  " + memoList.get(position).getId());
         holder.itemView.setTag(R.id.tag_first, memoList.get(position).getContent());
-        holder.itemView.setTag(R.id.tag_second, position);
+        holder.itemView.setTag(R.id.tag_second, holder);
 
 
     }
@@ -59,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onClick(View v) {
         if (mOnRecyclerViewItemClickListener != null) {
             mOnRecyclerViewItemClickListener.onItemClick(v,
-                    (String) v.getTag(R.id.tag_first), (Integer) v.getTag(R.id.tag_second));
+                    (String) v.getTag(R.id.tag_first), (MyViewHolder) v.getTag(R.id.tag_second));
         }
     }
 
@@ -125,7 +121,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
             itemMenu = (ImageView) itemView.findViewById(R.id.item_menu);
         }
+
+
     }
+
 
 
 }

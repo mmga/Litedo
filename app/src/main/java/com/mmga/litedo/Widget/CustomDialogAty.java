@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.LogUtil;
@@ -32,12 +31,10 @@ public class CustomDialogAty extends Activity{
         mEditText = (EditText) findViewById(R.id.edit_text);
 
         Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
-        int dataID = intent.getIntExtra("dataID", -1);
-        final int flag = dataID;
-        LogUtil.d("flag", ""+flag);
+        final String data = intent.getStringExtra("data");
+        LogUtil.d("data", ""+data);
 
-        if (dataID != -1) {
+        if (data != null) {
             mEditText.setText(data);
         } else {
             mEditText.setText("");
@@ -50,7 +47,7 @@ public class CustomDialogAty extends Activity{
         mButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveMemo(flag);
+                saveMemo(data);
             }
         });
 
@@ -71,7 +68,7 @@ public class CustomDialogAty extends Activity{
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    saveMemo(flag);
+                    saveMemo(data);
                     return true;
                 }
                 return false;
@@ -85,14 +82,13 @@ public class CustomDialogAty extends Activity{
 
     }
 
-    private void saveMemo(int flag) {
+    private void saveMemo(String data) {
 
-        if (flag == -1) {
+        if (data == null) {
             DBUtil.addData(mEditText.getText().toString());
             finish();
-        }else{
-
-            DBUtil.updateData(mEditText.getText().toString(), RecyclerViewAdapter.getMemoList().get(flag).getId()+RecyclerViewAdapter.getMemoList().size());
+        } else {
+            DBUtil.updateData(mEditText.getText().toString(), data);
             finish();
         }
     }

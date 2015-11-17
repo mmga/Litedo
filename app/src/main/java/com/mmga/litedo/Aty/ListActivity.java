@@ -23,6 +23,7 @@ import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Widget.CustomDialogAty;
+import com.mmga.litedo.db.Model.Memo;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private TextView noItemInfo;
 
-    private List memoList;
+    private List<Memo> memoList;
 
     private TextView mItemText;
     private ImageView mItemMenu;
@@ -165,11 +166,12 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             mAdapter.syncMemo();
         }
         super.onPause();
-        LogUtil.d("<<<<<","onPause");
+        LogUtil.d("ListActivity","onPause");
     }
 
     @Override
     protected void onResume() {
+
         //      延时更新UI
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -180,20 +182,19 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
             }
         }, 250);
-        LogUtil.d("<<<<<", "onResume");
+        LogUtil.d("ListActivity", "onResume");
         super.onResume();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtil.d("<<<<<", "onRestart");
     }
 
 
     //点击item弹出菜单
     @Override
-    public void onItemClick(final View view, final String data, final int id) {
+    public void onItemClick(final View view, final String data, final RecyclerViewAdapter.MyViewHolder holder) {
         mItemText = (TextView) view.findViewById(R.id.fg_view);
         mItemMenu = (ImageView)view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
@@ -203,8 +204,12 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ListActivity.this, CustomDialogAty.class);
+//                    LogUtil.d("vh", "" + holder);
+//                    LogUtil.d("vh-ID", "" +  memoList.get(holder.getAdapterPosition()).getId());
+//                    LogUtil.d("vh-Content", "" +  memoList.get(holder.getAdapterPosition()).getContent());
+//                    LogUtil.d("vh-position", "" +  holder.getAdapterPosition());
+
                     intent.putExtra("data", data);
-                    intent.putExtra("dataID", id);
                     startActivity(intent);
                 }
             });

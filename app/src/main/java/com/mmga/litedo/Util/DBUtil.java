@@ -1,5 +1,7 @@
 package com.mmga.litedo.Util;
 
+import android.content.ContentValues;
+
 import com.mmga.litedo.db.Model.Memo;
 
 import org.litepal.crud.DataSupport;
@@ -24,15 +26,11 @@ public class DBUtil {
         memo.save();
     }
 
-    public static void updateData(String content,int id) {
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put("content", content);
-        LogUtil.d("mEditText", content);
-        LogUtil.d("id", "" + id);
-//        DataSupport.update(Memo.class, contentValues, id);
-        Memo memo = new Memo();
-        memo.setContent(content);
-        memo.update(id);
+    public static void updateData(String content,String oldContent) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("content", content);
+        DataSupport.updateAll(Memo.class, contentValues,"content = ?", oldContent);
+        LogUtil.d("updateData",content + " + " +oldContent);
     }
 
 
@@ -66,7 +64,6 @@ public class DBUtil {
         if (memoList == null) {
             return;
         }else{
-            LogUtil.d("<<<<<", "" + memoList.size());
             for (int i = memoList.size() - 1; i >= 0; i--) {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());
