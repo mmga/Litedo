@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
-import com.mmga.litedo.Util.LogUtil;
 
 public class CustomDialogAty extends Activity{
 
@@ -32,7 +31,7 @@ public class CustomDialogAty extends Activity{
 
         Intent intent = getIntent();
         final String data = intent.getStringExtra("data");
-        LogUtil.d("data", ""+data);
+        final int position = intent.getIntExtra("position",-1);
 
         if (data != null) {
             mEditText.setText(data);
@@ -47,7 +46,7 @@ public class CustomDialogAty extends Activity{
         mButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveMemo(data);
+                saveMemo(data, position);
             }
         });
 
@@ -68,7 +67,7 @@ public class CustomDialogAty extends Activity{
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    saveMemo(data);
+                    saveMemo(data,position);
                     return true;
                 }
                 return false;
@@ -82,13 +81,14 @@ public class CustomDialogAty extends Activity{
 
     }
 
-    private void saveMemo(String data) {
+    private void saveMemo(String data,int position) {
 
         if (data == null) {
             DBUtil.addData(mEditText.getText().toString());
             finish();
         } else {
-            DBUtil.updateData(mEditText.getText().toString(), data);
+//            DBUtil.updateDataByContent(mEditText.getText().toString(), data);
+            DBUtil.updateDataByPosition(mEditText.getText().toString(),position);
             finish();
         }
     }

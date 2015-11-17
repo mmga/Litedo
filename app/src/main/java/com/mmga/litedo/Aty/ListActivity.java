@@ -204,12 +204,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ListActivity.this, CustomDialogAty.class);
-//                    LogUtil.d("vh", "" + holder);
-//                    LogUtil.d("vh-ID", "" +  memoList.get(holder.getAdapterPosition()).getId());
-//                    LogUtil.d("vh-Content", "" +  memoList.get(holder.getAdapterPosition()).getContent());
-//                    LogUtil.d("vh-position", "" +  holder.getAdapterPosition());
 
                     intent.putExtra("data", data);
+                    intent.putExtra("position", holder.getAdapterPosition());
                     startActivity(intent);
                 }
             });

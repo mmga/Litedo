@@ -20,13 +20,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     //定义接口
-    public static interface OnRecyclerViewItemClickListener {
+    public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view,String data,MyViewHolder viewHolder);
     }
 
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
 
-    private static List<Memo> memoList;
+    private List<Memo> memoList;
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -44,7 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.mTextView.setText(memoList.get(position).getContent() + "  " + memoList.get(position).getId());
+        holder.mTextView.setText(memoList.get(position).getContent());
         holder.itemView.setTag(R.id.tag_first, memoList.get(position).getContent());
         holder.itemView.setTag(R.id.tag_second, holder);
 

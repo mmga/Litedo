@@ -26,13 +26,23 @@ public class DBUtil {
         memo.save();
     }
 
-    public static void updateData(String content,String oldContent) {
+    /**
+     * 按照content更新数据
+     * @param content
+     * @param oldContent
+     */
+    public static void updateDataByContent(String content, String oldContent) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("content", content);
-        DataSupport.updateAll(Memo.class, contentValues,"content = ?", oldContent);
-        LogUtil.d("updateData",content + " + " +oldContent);
+        DataSupport.updateAll(Memo.class, contentValues, "content = ?", oldContent);
     }
 
+    public static void updateDataByPosition(String content,int position) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("content", content);
+        DataSupport.updateAll(Memo.class, contentValues, "position = ?", "" + position);
+    }
 
     /**
      * 按照id倒序查找数据
@@ -67,6 +77,7 @@ public class DBUtil {
             for (int i = memoList.size() - 1; i >= 0; i--) {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());
+                mMemo.setPosition(i);
                 mList.add(mMemo);
             }
             DataSupport.deleteAll(Memo.class);

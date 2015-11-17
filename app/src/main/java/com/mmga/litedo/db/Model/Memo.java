@@ -13,8 +13,16 @@ public class Memo extends DataSupport{
 
     private int count = 1;
 
+    private int position = -1;
 
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public int getId() {
         return id;
