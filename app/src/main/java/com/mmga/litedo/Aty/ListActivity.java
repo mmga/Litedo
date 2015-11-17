@@ -37,11 +37,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private TextView noItemInfo;
 
-    private List<Memo> memoList;
-
-    private TextView mItemText;
     private ImageView mItemMenu;
-
+    private TextView mItemText;
 
 
     @Override
@@ -87,8 +84,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-// ListActivity.this, DividerItemDecoration.VERTICAL_LIST));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +92,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fabAdd.setVisibility(View.GONE);
                 Intent i = new Intent(ListActivity.this, CustomDialogAty.class);
                 startActivity(i);
             }
@@ -116,7 +110,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             mRecyclerView.setVisibility(View.VISIBLE);
             noItemInfo.setVisibility(View.GONE);
 
-            memoList = DBUtil.getAllData();
+            List<Memo> memoList = DBUtil.getAllData();
             mAdapter = new RecyclerViewAdapter(memoList);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setOnItemClickListener(this);
@@ -125,7 +119,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     public static final int UPDATE_UI = 1;
-
     private Handler handler = new Handler(){
 
         public void handleMessage(Message msg) {
@@ -165,6 +158,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         if (mAdapter!=null) {
             mAdapter.syncMemo();
         }
+        fabAdd.setVisibility(View.GONE);
         super.onPause();
         LogUtil.d("ListActivity","onPause");
     }
@@ -196,20 +190,21 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     public void onItemClick(final View view, final String data, final RecyclerViewAdapter.MyViewHolder holder) {
         mItemText = (TextView) view.findViewById(R.id.fg_view);
-        mItemMenu = (ImageView)view.findViewById(R.id.item_menu);
+        mItemMenu = (ImageView) view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
-            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,20)).start();
+            //dp转px
+            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,24)).start();
             mItemMenu.setVisibility(View.VISIBLE);
             mItemMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ListActivity.this, CustomDialogAty.class);
-
                     intent.putExtra("data", data);
                     intent.putExtra("position", holder.getAdapterPosition());
                     startActivity(intent);
                 }
             });
+
         } else {
             mItemText.animate().translationX(0).start();
             mItemMenu.setVisibility(View.GONE);

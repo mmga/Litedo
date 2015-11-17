@@ -18,7 +18,6 @@ import com.mmga.litedo.Util.DBUtil;
 public class CustomDialogAty extends Activity{
 
     private EditText mEditText;
-    private ImageButton mButtonOk;
 
 
     @Override
@@ -26,7 +25,7 @@ public class CustomDialogAty extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_dialog);
 
-        mButtonOk = (ImageButton) findViewById(R.id.btn_ok);
+        ImageButton mButtonOk = (ImageButton) findViewById(R.id.btn_ok);
         mEditText = (EditText) findViewById(R.id.edit_text);
 
         Intent intent = getIntent();

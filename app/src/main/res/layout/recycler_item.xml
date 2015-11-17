@@ -24,7 +24,7 @@
 
     <ImageView
         android:id="@+id/item_menu"
-        android:layout_width="20dp"
+        android:layout_width="24dp"
         android:layout_height="60dp"
         android:src="@drawable/pencil"
         android:background="@color/colorPrimaryDark"

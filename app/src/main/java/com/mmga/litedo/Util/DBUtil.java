@@ -49,7 +49,7 @@ public class DBUtil {
      *
      * @return
      */
-    public static List getAllData() {
+    public static List<Memo> getAllData() {
         return DataSupport.where("count > ?", "0")
                 .order("id desc")
                 .find(Memo.class);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBackground"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
     <android.support.v7.widget.RecyclerView
@@ -15,7 +15,7 @@
         android:clipToPadding="false"
         android:id="@+id/recycler_view"
         android:scrollbars="vertical"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorBackground"
         />
 
     <TextView

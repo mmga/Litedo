@@ -45,8 +45,9 @@ public class WelcomeActivity extends Activity {
     private void initInfo() {
 
         DBUtil.addData("开始使用吧");
-        DBUtil.addData("滑动删除");
+        DBUtil.addData("向右滑动删除");
         DBUtil.addData("长按拖动");
+        DBUtil.addData("点击项目查看更多操作");
         DBUtil.addData("右下角按钮添加新便签");
 
         goListAty();
