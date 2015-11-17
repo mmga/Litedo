@@ -59,27 +59,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2eeba754-4bd0-4c45-83f3-a9efd71655cf" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/litedo72.png" />
-      <change type="DELETED" beforePath="D:\AndroidProject\Litedo\app\src\main\java\com\mmga\litedo\DividerItemDecoration.java" afterPath="" />
-      <change type="DELETED" beforePath="D:\AndroidProject\Litedo\app\src\main\res\drawable\divider.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Widget/CustomDialogAty.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Widget/CustomDialogAty.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Util/DBUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Util/DBUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Aty/ListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Aty/ListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/db/Model/Memo.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/db/Model/Memo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Aty/WelcomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/mmga/litedo/Aty/WelcomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/custom_edittext.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/custom_edittext.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/recycler_item.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/recycler_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="D:\AndroidProject\Litedo\app\src\main\res\mipmap-hdpi\litedo96.png" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" />
     </list>
     <ignored path="Litedo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -2767,7 +2747,13 @@
       <option name="project" value="LOCAL" />
       <updated>1447730040712</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="发布0.6">
+      <created>1447759142437</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1447759142437</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2866,7 +2852,8 @@
     <MESSAGE value="添加编辑功能，但是在拖动之后再点编辑会有bug&#10;加了recyclerview的分割线，但还没实装" />
     <MESSAGE value="按content而不是id来更新数据，问题在如果有相同内容的两条数据都会被修改。暂时存一下" />
     <MESSAGE value="数据库添加一列position 用来记录数据在list中的位置，updateDataByPosition" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据库添加一列position 用来记录数据在list中的位置，updateDataByPosition" />
+    <MESSAGE value="发布0.6" />
+    <option name="LAST_COMMIT_MESSAGE" value="发布0.6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
