@@ -33,7 +33,6 @@
 
         <activity
             android:name=".Widget.CustomDialogAty"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Dialog" />

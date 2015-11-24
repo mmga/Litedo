@@ -27,6 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
 
     private List<Memo> memoList;
+    Memo cacheMemo = null;
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -81,11 +82,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //删除一条内容
     private void deleteData(int position) {
+        cacheMemo = memoList.get(position);
         memoList.remove(position);
         notifyItemRemoved(position);
     }
 
-//    拖拽
+    public void undoDelete() {
+        memoList.add(0,cacheMemo);
+        notifyItemInserted(0);
+    }
+
+    //    拖拽
     public void mOnMove(int fromPos,int toPos) {
 
         if (fromPos < toPos) {

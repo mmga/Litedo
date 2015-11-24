@@ -1,6 +1,7 @@
 package com.mmga.litedo.Widget;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.Util.LogUtil;
 
 public class CustomDialogAty extends Activity{
 
@@ -66,18 +70,14 @@ public class CustomDialogAty extends Activity{
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    saveMemo(data,position);
+                    saveMemo(data, position);
                     return true;
                 }
                 return false;
             }
         });
 
-        /**
-         * 改变输入法中回车按钮de显示内容为“完成”
-         */
         mEditText.setImeOptions(EditorInfo.IME_ACTION_NONE);
-
     }
 
     private void saveMemo(String data,int position) {
@@ -86,7 +86,6 @@ public class CustomDialogAty extends Activity{
             DBUtil.addData(mEditText.getText().toString());
             finish();
         } else {
-//            DBUtil.updateDataByContent(mEditText.getText().toString(), data);
             DBUtil.updateDataByPosition(mEditText.getText().toString(),position);
             finish();
         }
@@ -94,13 +93,30 @@ public class CustomDialogAty extends Activity{
 
     @Override
     protected void onResume() {
-//        //打开软键盘
-//        InputMethodManager inputMethodManager = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputMethodManager.showSoftInput(mEditText, InputMethodManager.SHOW_FORCED);
-
+        openKeyboard(MyApplication.getContext(),mEditText);
         mEditText.requestFocus();
         super.onResume();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeKeyboard(MyApplication.getContext(), mEditText);
+    }
+
+    private void openKeyboard(Context context, View editText){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(editText, 0);
+        LogUtil.d("mmga", "openKeyboard");
+
+    }
+
+    private void closeKeyboard(Context context, View editText){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        LogUtil.d("mmga","closeKeyboard");
+    }
+
 }
 
 

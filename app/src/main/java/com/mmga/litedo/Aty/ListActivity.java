@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,10 +66,36 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 mAdapter.mOnSwiped(viewHolder);
+                showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setVisibility(View.GONE);
                     noItemInfo.setVisibility(View.VISIBLE);
                 }
+            }
+
+            private void showUndoSnackbar() {
+                Snackbar snackbar = Snackbar.make(mRecyclerView, "Confirm Deletion?", Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mAdapter.undoDelete();
+                    }
+                });
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                snackbar.setActionTextColor(getResources().getColor(R.color.colorWhite));
+                snackbar.setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+                        super.onShown(snackbar);
+                        fabAdd.setClickable(false);
+                    }
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        super.onDismissed(snackbar, event);
+                        fabAdd.setClickable(true);
+                    }
+                });
+                snackbar.show();
             }
 
         };
@@ -119,9 +146,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
     public static final int UPDATE_UI = 1;
-    private Handler handler = new Handler(){
-
-        public void handleMessage(Message msg) {
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case UPDATE_UI:
                     loadData();
@@ -130,9 +157,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 default:
                     break;
             }
+            return false;
         }
-    };
-
+    });
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

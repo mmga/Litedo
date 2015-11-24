@@ -26,7 +26,7 @@
         android:id="@+id/item_menu"
         android:layout_width="24dp"
         android:layout_height="60dp"
-        android:src="@drawable/pencil"
+        android:src="@mipmap/ic_pencil_white_24dp"
         android:background="@color/colorPrimaryDark"
         android:visibility="gone"
         android:layout_alignParentRight="true"
