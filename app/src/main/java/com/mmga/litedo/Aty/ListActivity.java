@@ -2,8 +2,6 @@ package com.mmga.litedo.Aty;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,20 +13,20 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
+import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
-import com.mmga.litedo.Widget.CustomDialogAty;
 import com.mmga.litedo.db.Model.Memo;
 
-import java.util.List;
-
-public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener{
+public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
 
     private RecyclerView mRecyclerView;
@@ -49,68 +47,22 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         init();
 
-
-        ItemTouchHelper.SimpleCallback callback =new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                ItemTouchHelper.RIGHT) {
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-                //拖拽
-                final int fromPos = source.getAdapterPosition();
-                final int toPos = target.getAdapterPosition();
-                LogUtil.d("<<<<<", "" + fromPos + "+" + toPos);
-                mAdapter.mOnMove(fromPos, toPos);
-                return true;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                mAdapter.mOnSwiped(viewHolder);
-                showUndoSnackbar();
-                if (mAdapter.getItemCount() == 0) {
-                    mRecyclerView.setVisibility(View.GONE);
-                    noItemInfo.setVisibility(View.VISIBLE);
-                }
-            }
-
-            private void showUndoSnackbar() {
-                Snackbar snackbar = Snackbar.make(mRecyclerView, "Confirm Deletion?", Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mAdapter.undoDelete();
-                    }
-                });
-                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                snackbar.setActionTextColor(getResources().getColor(R.color.colorWhite));
-                snackbar.setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onShown(Snackbar snackbar) {
-                        super.onShown(snackbar);
-                        fabAdd.setClickable(false);
-                    }
-
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        super.onDismissed(snackbar, event);
-                        fabAdd.setClickable(true);
-                    }
-                });
-                snackbar.show();
-            }
-
-        };
+        ItemTouchHelper.SimpleCallback callback = simpleCallback;
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    private void init() {
 
+    private void init() {
         noItemInfo = (TextView) findViewById(R.id.no_item_info);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new RecyclerViewAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,51 +71,94 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ListActivity.this, CustomDialogAty.class);
-                startActivity(i);
+                Intent i = new Intent(ListActivity.this, TextInputAty.class);
+                startActivityForResult(i, 1);
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+            }
+        });
+    }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+            //拖拽
+            final int fromPos = source.getAdapterPosition();
+            final int toPos = target.getAdapterPosition();
+            LogUtil.d("<<<<<", "" + fromPos + "+" + toPos);
+            mAdapter.mOnMove(fromPos, toPos);
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            mAdapter.mOnSwiped(viewHolder);
+            showUndoSnackbar();
+            if (mAdapter.getItemCount() == 0) {
+                mRecyclerView.setVisibility(View.GONE);
+                noItemInfo.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+    };
+
+
+    private void showUndoSnackbar() {
+        final Snackbar snackbar = Snackbar.make(mRecyclerView, "Confirm Deletion?", Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                noItemInfo.setVisibility(View.GONE);
+                mAdapter.undoDelete();
             }
         });
 
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onShown(Snackbar snackbar) {
+                super.onShown(snackbar);
+                fabAdd.setClickable(false);
+            }
 
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+                fabAdd.setClickable(true);
+            }
+        });
+        snackbar.show();
     }
-
 
     //读取数据库，刷新列表
     private void loadData() {
-        if (DBUtil.getDataNum() == 0) {
+        mAdapter.setAdapterData();
+        if (mAdapter.getItemCount() == 0) {
             mRecyclerView.setVisibility(View.GONE);
             noItemInfo.setVisibility(View.VISIBLE);
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
             noItemInfo.setVisibility(View.GONE);
-
-            List<Memo> memoList = DBUtil.getAllData();
-            mAdapter = new RecyclerViewAdapter(memoList);
-            mRecyclerView.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener(this);
-
         }
     }
 
-    public static final int UPDATE_UI = 1;
-    private Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case UPDATE_UI:
-                    loadData();
-                    fabAdd.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    });
+
+    private void setAnimation() {
+
+        Animation animation = AnimationUtils.loadAnimation(MyApplication.getContext(), R.anim.slide_in_right);
+        LayoutAnimationController controller = new LayoutAnimationController(animation);
+        controller.setDelay(0.2f);
+        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        mRecyclerView.setLayoutAnimation(controller);
+        mRecyclerView.startAnimation(animation);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
@@ -182,36 +177,26 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     protected void onPause() {
-        if (mAdapter!=null) {
+        if (mAdapter != null) {
             mAdapter.syncMemo();
         }
         fabAdd.setVisibility(View.GONE);
         super.onPause();
-        LogUtil.d("ListActivity","onPause");
+        LogUtil.d("ListActivity", "onPause");
     }
 
     @Override
     protected void onResume() {
-
-        //      延时更新UI
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Message message = new Message();
-                message.what = UPDATE_UI;
-                handler.sendMessage(message);
-
-            }
-        }, 250);
-        LogUtil.d("ListActivity", "onResume");
+        fabAdd.setVisibility(View.VISIBLE);
         super.onResume();
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
+    protected void onStart() {
 
+        loadData();
+        super.onStart();
+    }
 
     //点击item弹出菜单
     @Override
@@ -220,26 +205,39 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         mItemMenu = (ImageView) view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
             //dp转px
-            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this,24)).start();
+            mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this, 24)).start();
             mItemMenu.setVisibility(View.VISIBLE);
             mItemMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ListActivity.this, CustomDialogAty.class);
+                    Intent intent = new Intent(ListActivity.this, TextInputAty.class);
                     intent.putExtra("data", data);
                     intent.putExtra("position", holder.getAdapterPosition());
-                    startActivity(intent);
+                    startActivityForResult(intent, 1);
+                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
-
         } else {
             mItemText.animate().translationX(0).start();
             mItemMenu.setVisibility(View.GONE);
         }
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_NEW) {
+            Memo memo = new Memo();
+            memo.setContent(data.getStringExtra("content"));
+            mAdapter.addData(memo);
+            mRecyclerView.smoothScrollToPosition(0);
+        } else if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_EDIT) {
+            Memo memo = new Memo();
+            memo.setContent(data.getStringExtra("content"));
+            int position = data.getIntExtra("position", 0);
+            mAdapter.updateData(position, memo);
+        }
+    }
 }
 
 

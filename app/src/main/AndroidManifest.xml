@@ -32,7 +32,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".Widget.CustomDialogAty"
+            android:name=".Aty.TextInputAty"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Dialog" />

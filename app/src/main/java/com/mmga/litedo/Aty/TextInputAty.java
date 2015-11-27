@@ -1,4 +1,4 @@
-package com.mmga.litedo.Widget;
+package com.mmga.litedo.Aty;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,12 +16,15 @@ import android.widget.ImageButton;
 
 import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.LogUtil;
 
-public class CustomDialogAty extends Activity{
+public class TextInputAty extends Activity{
 
     private EditText mEditText;
+
+    public final static int RESULT_CODE_NEW = 1000;
+    public final static int RESULT_CODE_EDIT = 1001;
+
 
 
     @Override
@@ -42,14 +45,11 @@ public class CustomDialogAty extends Activity{
             mEditText.setText("");
         }
 
-        //限制字符长度
-        // TODO: 怎么限制15个中文字符30个英文呢？
-//        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
 
         mButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveMemo(data, position);
+                saveMemo(position);
             }
         });
 
@@ -62,15 +62,13 @@ public class CustomDialogAty extends Activity{
 
         //设置默认输入法为中文
         mEditText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
-        /**
-         * 监听输入法按键，改回车按钮为保存
-         */
+        //监听输入法按键，改回车按钮为保存
         mEditText.setOnKeyListener(new View.OnKeyListener() {
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    saveMemo(data, position);
+                    saveMemo(position);
                     return true;
                 }
                 return false;
@@ -80,13 +78,16 @@ public class CustomDialogAty extends Activity{
         mEditText.setImeOptions(EditorInfo.IME_ACTION_NONE);
     }
 
-    private void saveMemo(String data,int position) {
+    private void saveMemo(int position) {
+        Intent intent = new Intent();
+        intent.putExtra("content", mEditText.getText().toString());
 
-        if (data == null) {
-            DBUtil.addData(mEditText.getText().toString());
+        if (position == -1) {
+            setResult(RESULT_CODE_NEW, intent);
             finish();
         } else {
-            DBUtil.updateDataByPosition(mEditText.getText().toString(),position);
+            intent.putExtra("position", position);
+            setResult(RESULT_CODE_EDIT, intent);
             finish();
         }
     }
@@ -101,6 +102,13 @@ public class CustomDialogAty extends Activity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+//        closeKeyboard(MyApplication.getContext(), mEditText);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
         closeKeyboard(MyApplication.getContext(), mEditText);
     }
 

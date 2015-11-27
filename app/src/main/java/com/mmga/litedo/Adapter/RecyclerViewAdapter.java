@@ -19,6 +19,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
+
     //定义接口
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view,String data,MyViewHolder viewHolder);
@@ -27,10 +28,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
 
     private List<Memo> memoList;
-    Memo cacheMemo = null;
+    private Memo lastDeletedMemo = null;
+    private int lastDeletedMemoPosition;
+
+    public RecyclerViewAdapter() {
+
+    }
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
+    }
+
+    public void setAdapterData() {
+        memoList = DBUtil.getAllData();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -48,8 +59,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mTextView.setText(memoList.get(position).getContent());
         holder.itemView.setTag(R.id.tag_first, memoList.get(position).getContent());
         holder.itemView.setTag(R.id.tag_second, holder);
-
-
     }
 
     @Override
@@ -64,33 +73,46 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.mOnRecyclerViewItemClickListener = listener;
     }
 
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position, List<Object> payloads) {
-        super.onBindViewHolder(holder, position, payloads);
-    }
 
     @Override
     public int getItemCount() {
-        return memoList.size();
+        if (memoList != null) {
+            return memoList.size();
+        } else {
+            return 0;
+        }
+
     }
 
     //滑动删除
     public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
         deleteData(viewHolder.getAdapterPosition());
-
     }
 
-    //删除一条内容
+    public void addData(Memo newMemo) {
+        memoList.add(0, newMemo);
+        notifyItemInserted(0);
+    }
+
     private void deleteData(int position) {
-        cacheMemo = memoList.get(position);
+        lastDeletedMemo = memoList.get(position);
+        lastDeletedMemoPosition = position;
         memoList.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     public void undoDelete() {
-        memoList.add(0,cacheMemo);
-        notifyItemInserted(0);
+        memoList.add(lastDeletedMemoPosition, lastDeletedMemo);
+        notifyItemInserted(lastDeletedMemoPosition);
     }
+
+    public void updateData(int position,Memo editedMemo) {
+        memoList.set(position, editedMemo);
+        notifyItemChanged(position);
+    }
+
+
 
     //    拖拽
     public void mOnMove(int fromPos,int toPos) {
@@ -128,8 +150,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
             itemMenu = (ImageView) itemView.findViewById(R.id.item_menu);
         }
-
-
     }
 
 

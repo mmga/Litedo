@@ -1,7 +1,5 @@
 package com.mmga.litedo.Util;
 
-import android.content.ContentValues;
-
 import com.mmga.litedo.db.Model.Memo;
 
 import org.litepal.crud.DataSupport;
@@ -27,24 +25,6 @@ public class DBUtil {
     }
 
     /**
-     * 按照content更新数据
-     * @param content
-     * @param oldContent
-     */
-    public static void updateDataByContent(String content, String oldContent) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("content", content);
-        DataSupport.updateAll(Memo.class, contentValues, "content = ?", oldContent);
-    }
-
-    public static void updateDataByPosition(String content,int position) {
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("content", content);
-        DataSupport.updateAll(Memo.class, contentValues, "position = ?", "" + position);
-    }
-
-    /**
      * 按照id倒序查找数据
      *
      * @return
@@ -53,16 +33,6 @@ public class DBUtil {
         return DataSupport.where("count > ?", "0")
                 .order("id desc")
                 .find(Memo.class);
-    }
-
-    /**
-     * 获得应显示的memo数量
-     *
-     * @return
-     */
-    public static int getDataNum() {
-        int num = DataSupport.where("count > ?", "0").count(Memo.class);
-        return num;
     }
 
     /**
