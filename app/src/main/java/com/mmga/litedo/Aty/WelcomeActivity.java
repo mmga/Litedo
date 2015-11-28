@@ -21,9 +21,9 @@ public class WelcomeActivity extends Activity {
     private final int OLD_USER = 1002;
 
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(Message msg) {
+        public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case NEW_USER:
                     initInfo();
@@ -32,8 +32,11 @@ public class WelcomeActivity extends Activity {
                     goListAty();
                     break;
             }
+            return false;
         }
-    };
+    });
+
+
 
     private void goListAty() {
         Intent i = new Intent(WelcomeActivity.this, ListActivity.class);

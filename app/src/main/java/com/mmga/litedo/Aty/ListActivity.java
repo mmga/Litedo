@@ -24,6 +24,7 @@ import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
+import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
@@ -36,14 +37,12 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private TextView noItemInfo;
 
-    private ImageView mItemMenu;
-    private TextView mItemText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StatusBarCompat.compat(this,getResources().getColor(R.color.colorPrimaryDark));
 
         init();
 
@@ -78,7 +77,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         });
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+    private ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
             ItemTouchHelper.RIGHT) {
 
         @Override
@@ -198,11 +197,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onStart();
     }
 
+
+
     //点击item弹出菜单
     @Override
     public void onItemClick(final View view, final String data, final RecyclerViewAdapter.MyViewHolder holder) {
-        mItemText = (TextView) view.findViewById(R.id.fg_view);
-        mItemMenu = (ImageView) view.findViewById(R.id.item_menu);
+        TextView mItemText = (TextView) view.findViewById(R.id.fg_view);
+        ImageView mItemMenu = (ImageView) view.findViewById(R.id.item_menu);
         if (mItemMenu.getVisibility() == View.GONE) {
             //dp转px
             mItemText.animate().translationX(-DensityUtil.dip2px(ListActivity.this, 24)).start();

@@ -41,9 +41,7 @@ public class DBUtil {
      */
     public static void syncData(List<Memo> memoList) {
 
-        if (memoList == null) {
-            return;
-        }else{
+        if (memoList != null) {
             for (int i = memoList.size() - 1; i >= 0; i--) {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="MEMO" ></dbname>
+    <dbname value="MEMO" />
 
-    <version value="2" ></version>
+    <version value="2" />
 
     <list>
         <mapping class="com.mmga.litedo.db.Model.Memo"/>

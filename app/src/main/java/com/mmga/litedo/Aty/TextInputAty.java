@@ -100,12 +100,6 @@ public class TextInputAty extends Activity{
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        closeKeyboard(MyApplication.getContext(), mEditText);
-    }
-
-    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);

@@ -1,17 +1,13 @@
 <resources>
     <string name="app_name">Litedo</string>
-    <string name="action_settings">Settings</string>
-    <string name="edittext_hint">打算做点什么</string>
-    <string name="welcome">Litedo-Like to do</string>
     <string name="no_item_info">没有任务啦( • ̀ω•́ )</string>
-    <string name="Litedo">Litedo--Like to do</string>
+    <string name="Litedo">Litedo—Like to do</string>
     <string name="github">github:https://github.com/mmga/Litedo</string>
     <string name="author">开发者：@mmga</string>
     <string name="version">v0.6.2</string>
     <string name="aboutMe">关于</string>
-    <string name="bg_text">123456</string>
 
-        <item type="id" name="tag_first"></item>
-        <item type="id" name="tag_second"></item>
+        <item type="id" name="tag_first"/>
+        <item type="id" name="tag_second"/>
 
 </resources>

@@ -2,19 +2,17 @@ package com.mmga.litedo.Util;
 
 import android.util.Log;
 
-/**
- * Created by mmga on 2015/10/29.
- */
+
 public class LogUtil {
 
-    public static final int VERBOSE = 1;
-    public static final int DEBUG = 2;
-    public static final int INFO = 3;
-    public static final int WARN = 4;
-    public static final int ERROR = 5;
+    private static final int VERBOSE = 1;
+    private static final int DEBUG = 2;
+    private static final int INFO = 3;
+    private static final int WARN = 4;
+    private static final int ERROR = 5;
     public static final int NOTHING = 6;
 
-    public static final int LEVEL = DEBUG;
+    private static final int LEVEL = DEBUG;
 
     public static void v(String tag, String msg) {
         if (LEVEL <= VERBOSE) {
