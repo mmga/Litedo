@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -15,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener,MySimpleCallback.ItemTouchHelperAdapter{
 
 
 
@@ -32,8 +33,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private int lastDeletedMemoPosition;
 
     public RecyclerViewAdapter() {
-
     }
+
 
     public RecyclerViewAdapter(List<Memo> memoList) {
         this.memoList = memoList;
@@ -84,22 +85,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-    //滑动删除
-    public void mOnSwiped(RecyclerView.ViewHolder viewHolder) {
-        deleteData(viewHolder.getAdapterPosition());
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(memoList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+
+        return true;
     }
 
-    public void addData(Memo newMemo) {
-        memoList.add(0, newMemo);
-        notifyItemInserted(0);
-    }
-
-    private void deleteData(int position) {
+    @Override
+    public void onItemDismiss(int position) {
         lastDeletedMemo = memoList.get(position);
         lastDeletedMemoPosition = position;
         memoList.remove(position);
         notifyItemRemoved(position);
-        notifyDataSetChanged();
+    }
+
+
+
+    public void addData(Memo newMemo) {
+        memoList.add(0, newMemo);
+        notifyItemInserted(0);
     }
 
     public void undoDelete() {
@@ -112,43 +119,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyItemChanged(position);
     }
 
-
-
-    //    拖拽
-    public void mOnMove(int fromPos,int toPos) {
-
-        if (fromPos < toPos) {
-            for (int i = fromPos; i < toPos; i++) {
-                Collections.swap(memoList, i, i + 1);
-            }
-        } else {
-            for (int i = fromPos; i > toPos; i--) {
-                Collections.swap(memoList, i, i - 1);
-            }
-        }
-        notifyItemMoved(fromPos, toPos);
-
-
-    }
-
-
     public void syncMemo() {
             DBUtil.syncData(memoList);
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements MySimpleCallback.ItemTouchHelperViewHolder{
 
         public TextView mTextView;
         public View recyclerViewItem;
-        public ImageView itemMenu;
+        public ImageView itemEditButton;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             mTextView = (TextView) itemView.findViewById(R.id.fg_view);
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
-            itemMenu = (ImageView) itemView.findViewById(R.id.item_menu);
+            itemEditButton = (ImageView) itemView.findViewById(R.id.item_edit_button);
+        }
+
+        @Override
+        public void onItemSelected() {
+            recyclerViewItem.setScaleY(0.95f);
+        }
+
+        @Override
+        public void onItemClear() {
+            recyclerViewItem.setScaleY(1f);
         }
     }
 

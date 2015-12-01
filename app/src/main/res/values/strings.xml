@@ -4,10 +4,10 @@
     <string name="Litedo">Litedo—Like to do</string>
     <string name="github">github:https://github.com/mmga/Litedo</string>
     <string name="author">开发者：@mmga</string>
-    <string name="version">v0.6.2</string>
-    <string name="aboutMe">关于</string>
+    <string name="version">v0.6.3</string>
+    <string name="aboutMe">about</string>
 
-        <item type="id" name="tag_first"/>
-        <item type="id" name="tag_second"/>
+    <item name="tag_first" type="id" />
+    <item name="tag_second" type="id" />
 
 </resources>

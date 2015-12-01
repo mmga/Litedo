@@ -1,6 +1,9 @@
 package com.mmga.litedo.Util;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
+
+import com.mmga.litedo.MyApplication;
 
 public class DensityUtil {
 
@@ -24,5 +27,9 @@ public class DensityUtil {
             scale = context.getResources().getDisplayMetrics().density;
         }
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        return MyApplication.getContext().getResources().getDisplayMetrics();
     }
 }

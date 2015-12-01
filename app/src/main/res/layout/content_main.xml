@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/no_item_info"
         android:text="@string/no_item_info"
-        android:textColor="#ececec"
+        android:textColor="@color/colorPrimary"
         android:layout_centerInParent="true"
         android:textSize="20sp"
         android:visibility="gone"
