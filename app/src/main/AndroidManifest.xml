@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mmga.litedo" >
+    package="com.mmga.litedo">
 
     <application
         android:name="com.mmga.litedo.MyApplication"
@@ -9,13 +9,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
 
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
             android:name=".Aty.ListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Aty.WelcomeActivity"
@@ -28,8 +27,11 @@
         </activity>
 
 
-        <activity android:name=".Aty.AboutActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Aty.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/setting"/>
 
         <activity
             android:name=".Aty.TextInputAty"
