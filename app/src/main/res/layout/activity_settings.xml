@@ -35,21 +35,21 @@
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginTop="24dp"
-                    android:src="@drawable/litedo512" />
+                    android:src="@drawable/logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/litedo"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/version"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -75,117 +75,171 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/setting"
-                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/customize"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="14sp" />
 
             <RelativeLayout
-                android:padding="8dp"
+                android:id="@+id/showtime"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_white_gray_selector"
+                android:clickable="true"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp">
 
                 <TextView
+                    android:id="@+id/text_showtime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textColor="@color/colorText"
                     android:text="@string/show_time"
+                    android:textColor="@color/colorText"
                     android:textSize="20sp" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:textColor="@color/colorText"
-                    android:text="下拉新建"
-                    android:textSize="20sp" />
+                    android:layout_alignLeft="@id/text_showtime"
+                    android:layout_below="@+id/text_showtime"
+                    android:text="@string/show_time_content"
+                    android:textAppearance="@style/setting_text_small" />
 
-                <Switch
+                <CheckBox
+                    android:id="@+id/showtime_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="上拉新建"
-                    android:textColor="@color/colorText"
-                    android:textSize="20sp" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2px"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:background="@color/colorGrayDivider" />
+
+            <RelativeLayout
+                android:id="@+id/dark_theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_white_gray_selector"
+                android:clickable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="深色主题"
+                    android:textAppearance="@style/setting_text_middle" />
+
+                <CheckBox
+                    android:id="@+id/dark_theme_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/colorGrayDivider" />
+
+            <RelativeLayout
+                android:id="@+id/quick_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_white_gray_selector"
+                android:clickable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/fast_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="快速编辑"
+                    android:textAppearance="@style/setting_text_middle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/fast_edit"
+                    android:layout_below="@+id/fast_edit"
+                    android:text="@string/fast_edit_description"
+                    android:textAppearance="@style/setting_text_small" />
+
+                <CheckBox
+                    android:id="@+id/quick_mode_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
                 android:background="@color/colorGrayDivider" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/about"
+                android:paddingLeft="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:textSize="14sp"
-                />
+                android:text="@string/about"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/suggest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorText"
-                android:textSize="20sp"
-                android:padding="8dp"
-                android:text="反馈意见"/>
+                android:clickable="true"
+                android:padding="16dp"
+                android:text="反馈建议"
+                android:textAppearance="@style/setting_text_middle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/colorGrayDivider" />
 
             <TextView
+                android:id="@+id/rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorText"
-                android:textSize="20sp"
-                android:padding="8dp"
-                android:text="给个好评"/>
+                android:clickable="true"
+                android:padding="16dp"
+                android:text="给个好评"
+                android:textAppearance="@style/setting_text_middle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/colorGrayDivider" />
 
             <TextView
+                android:id="@+id/license"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorText"
-                android:textSize="20sp"
-                android:padding="8dp"
-                android:text="版权说明"/>
+                android:clickable="true"
+                android:padding="16dp"
+                android:text="版权说明"
+                android:textAppearance="@style/setting_text_middle" />
 
 
         </LinearLayout>

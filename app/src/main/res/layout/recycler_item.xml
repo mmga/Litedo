@@ -4,28 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:layout_marginTop="1dp"
-    android:background="#e1e1e1"
     android:orientation="horizontal">
 
 
-    <TextView
-        android:id="@+id/fg_view"
+    <RelativeLayout
+        android:id="@+id/platform"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height"
-        android:layout_centerVertical="true"
-        android:background="@color/colorWhite"
-        android:gravity="left|center_vertical"
-        android:padding="8dp"
-        android:singleLine="true"
-        android:textColor="@color/colorText"
-        android:textSize="22sp" />
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/fg_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="left|center_vertical"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textColor="@color/colorText"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="2dp"
+            android:paddingRight="8dp"
+            android:textAppearance="@style/setting_text_small" />
+
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/item_menu"
         android:layout_width="52dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
         android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
         android:visibility="gone">
 
 

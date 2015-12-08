@@ -13,6 +13,12 @@ public class Memo extends DataSupport{
 
     private int position = -1;
 
+    private Long createTimeInMillis;
+
+    private int Star = 0;
+
+    private int Top = 0;
+
 
     public int getPosition() {
         return position;
@@ -44,5 +50,29 @@ public class Memo extends DataSupport{
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getStar() {
+        return Star;
+    }
+
+    public void setStar(int star) {
+        Star = star;
+    }
+
+    public int getTop() {
+        return Top;
+    }
+
+    public void setTop(int top) {
+        Top = top;
+    }
+
+    public Long getCreateTimeInMillis() {
+        return createTimeInMillis;
+    }
+
+    public void setCreateTimeInMillis(Long createTimeInMillis) {
+        this.createTimeInMillis = createTimeInMillis;
     }
 }

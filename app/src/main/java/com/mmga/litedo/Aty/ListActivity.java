@@ -35,10 +35,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
-
     private FloatingActionButton fabAdd;
-
     private TextView noItemInfo;
+    private long mCreateTime;
 
 
     @Override
@@ -155,7 +154,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.aboutMenuItem:
-                Intent i = new Intent(ListActivity.this, AboutActivity.class);
+                Intent i = new Intent(ListActivity.this, SettingsActivity.class);
                 startActivity(i);
                 return true;
             default:
@@ -188,13 +187,15 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
 
     TextView itemText;
+    RelativeLayout platform;
     RelativeLayout itemMenu;
     ImageView itemEditButton;
 
     //点击item弹出菜单
     @Override
-    public void onItemClick(final View view, final String data, final RecyclerViewAdapter.MyViewHolder holder) {
+    public void onItemClick(final View view, final Memo memo, final RecyclerViewAdapter.MyViewHolder holder) {
         itemText = (TextView) view.findViewById(R.id.fg_view);
+        platform = (RelativeLayout) view.findViewById(R.id.platform);
         itemMenu = (RelativeLayout) view.findViewById(R.id.item_menu);
         itemEditButton = (ImageView) view.findViewById(R.id.item_edit_button);
         if (itemMenu.getVisibility() == View.GONE) {
@@ -204,8 +205,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 public void onClick(View v) {
                     hideItemMenu();
                     Intent intent = new Intent(ListActivity.this, TextInputAty.class);
-                    intent.putExtra("data", data);
+                    intent.putExtra("data", memo.getContent());
                     intent.putExtra("position", holder.getAdapterPosition());
+                    mCreateTime = memo.getCreateTimeInMillis();
                     startActivityForResult(intent, 1);
                     overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
@@ -219,7 +221,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         itemMenu.setVisibility(View.VISIBLE);
         int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 52);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", itemMenuWidth, 0);
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(itemText, "translationX", 0, -itemMenuWidth);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", 0, -itemMenuWidth);
         AnimatorSet set = new AnimatorSet();
         set.setInterpolator(new DecelerateInterpolator());
         set.setDuration(200);
@@ -230,7 +232,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private void hideItemMenu() {
         int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 52);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", 0, itemMenuWidth);
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(itemText, "translationX", -itemMenuWidth, 0);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", -itemMenuWidth, 0);
         AnimatorSet set = new AnimatorSet();
         set.setInterpolator(new DecelerateInterpolator());
         set.setDuration(200);
@@ -254,12 +256,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             mRecyclerView.setVisibility(View.VISIBLE);
             Memo memo = new Memo();
             memo.setContent(data.getStringExtra("content"));
+            memo.setCreateTimeInMillis(data.getLongExtra("time", 0));
             mAdapter.addData(memo);
             mRecyclerView.smoothScrollToPosition(0);
         } else if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_EDIT) {
             Memo memo = new Memo();
             memo.setContent(data.getStringExtra("content"));
             int position = data.getIntExtra("position", 0);
+            memo.setCreateTimeInMillis(mCreateTime);
             mAdapter.updateData(position, memo);
         }
     }

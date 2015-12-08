@@ -7,23 +7,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.Util.DateUtil;
+import com.mmga.litedo.Util.SharedPrefsUtil;
 import com.mmga.litedo.db.Model.Memo;
 
 import java.util.Collections;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener,MySimpleCallback.ItemTouchHelperAdapter{
-
-
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener, MySimpleCallback.ItemTouchHelperAdapter {
 
 
     //定义接口
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view,String data,MyViewHolder viewHolder);
+        void onItemClick(View view, Memo memo, MyViewHolder viewHolder);
     }
 
     private OnRecyclerViewItemClickListener mOnRecyclerViewItemClickListener = null;
@@ -58,7 +59,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.mTextView.setText(memoList.get(position).getContent());
-        holder.itemView.setTag(R.id.tag_first, memoList.get(position).getContent());
+        if (SharedPrefsUtil.getValue(MyApplication.getContext(), "settings", "isShowTime", false)) {
+            holder.mCreateTime.setVisibility(View.VISIBLE);
+            holder.mCreateTime.setText(DateUtil.detailedTime(memoList.get(position).getCreateTimeInMillis()));
+//            holder.mCreateTime.setText(DateUtil.simpleTime(memoList.get(position).getCreateTimeInMillis()));
+        } else {
+            holder.mCreateTime.setVisibility(View.GONE);
+        }
+        holder.itemView.setTag(R.id.tag_first, memoList.get(position));
         holder.itemView.setTag(R.id.tag_second, holder);
     }
 
@@ -66,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onClick(View v) {
         if (mOnRecyclerViewItemClickListener != null) {
             mOnRecyclerViewItemClickListener.onItemClick(v,
-                    (String) v.getTag(R.id.tag_first), (MyViewHolder) v.getTag(R.id.tag_second));
+                    (Memo) v.getTag(R.id.tag_first), (MyViewHolder) v.getTag(R.id.tag_second));
         }
     }
 
@@ -103,7 +111,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-
     public void addData(Memo newMemo) {
         memoList.add(0, newMemo);
         notifyItemInserted(0);
@@ -114,26 +121,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyItemInserted(lastDeletedMemoPosition);
     }
 
-    public void updateData(int position,Memo editedMemo) {
+    public void updateData(int position, Memo editedMemo) {
         memoList.set(position, editedMemo);
         notifyItemChanged(position);
     }
 
     public void syncMemo() {
-            DBUtil.syncData(memoList);
+        DBUtil.syncData(memoList);
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements MySimpleCallback.ItemTouchHelperViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements MySimpleCallback.ItemTouchHelperViewHolder {
 
         public TextView mTextView;
         public View recyclerViewItem;
         public ImageView itemEditButton;
+        public TextView mCreateTime;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             mTextView = (TextView) itemView.findViewById(R.id.fg_view);
+            mCreateTime = (TextView) itemView.findViewById(R.id.create_time);
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
             itemEditButton = (ImageView) itemView.findViewById(R.id.item_edit_button);
         }
@@ -148,7 +157,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             recyclerViewItem.setScaleY(1f);
         }
     }
-
 
 
 }

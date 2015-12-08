@@ -4,13 +4,39 @@
     <string name="litedo">Litedo—Like to do</string>
     <string name="github">github:https://github.com/mmga/Litedo</string>
     <string name="author">开发者：@mmga</string>
-    <string name="version">v0.6.3</string>
-    <string name="aboutMe">about</string>
+    <string name="version">v0.6.4</string>
+    <string name="settings">settings</string>
     <string name="setting">设置</string>
+    <string name="customize">个性化</string>
     <string name="show_time">显示时间</string>
-    <string name="about">about</string>
+    <string name="about">关于</string>
+    <string name="show_time_content">便签上显示创建时间</string>
+    <string name="fast_edit_description">取消弹出输入栏，直接在便签上添加/编辑</string>
+
+
+
+
+
+    <string name="justnow">刚刚</string>
+    <string name="time_error"><![CDATA[>_<]]></string>
+    <string name="five_minutes_ago">5分钟前</string>
+    <string name="one_hour_ago">1小时前</string>
+    <string name="half_day_ago">半天前</string>
+    <string name="one_day_ago">1天前</string>
+    <string name="two_days_ago">2天前</string>
+    <string name="three_days_ago">3天前</string>
+    <string name="four_days_ago">4天前</string>
+    <string name="five_days_ago">5天前</string>
+    <string name="six_days_ago">6天前</string>
+    <string name="one_week_ago">1周前</string>
+    <string name="ten_days_ago">10天前</string>
+    <string name="two_weeks_ago">2周前</string>
+    <string name="three_weeks_ago">3周前</string>
+    <string name="one_month_ago">1个月前</string>
+    <string name="three_months_ago">3个月前</string>
 
     <item name="tag_first" type="id" />
     <item name="tag_second" type="id" />
+    <item name="tag_third" type="id" />
 
 </resources>

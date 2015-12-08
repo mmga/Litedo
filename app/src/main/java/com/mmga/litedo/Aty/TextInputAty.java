@@ -18,13 +18,12 @@ import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.LogUtil;
 
-public class TextInputAty extends Activity{
+public class TextInputAty extends Activity {
 
     private EditText mEditText;
 
     public final static int RESULT_CODE_NEW = 1000;
     public final static int RESULT_CODE_EDIT = 1001;
-
 
 
     @Override
@@ -37,7 +36,7 @@ public class TextInputAty extends Activity{
 
         Intent intent = getIntent();
         final String data = intent.getStringExtra("data");
-        final int position = intent.getIntExtra("position",-1);
+        final int position = intent.getIntExtra("position", -1);
 
         if (data != null) {
             mEditText.setText(data);
@@ -57,7 +56,6 @@ public class TextInputAty extends Activity{
         WindowManager.LayoutParams layoutParams = window.getAttributes();
         layoutParams.gravity = Gravity.BOTTOM;
         window.setAttributes(layoutParams);
-
 
 
         //设置默认输入法为中文
@@ -81,6 +79,7 @@ public class TextInputAty extends Activity{
     private void saveMemo(int position) {
         Intent intent = new Intent();
         intent.putExtra("content", mEditText.getText().toString());
+        intent.putExtra("time", System.currentTimeMillis());
 
         if (position == -1) {
             setResult(RESULT_CODE_NEW, intent);
@@ -94,7 +93,7 @@ public class TextInputAty extends Activity{
 
     @Override
     protected void onResume() {
-        openKeyboard(MyApplication.getContext(),mEditText);
+        openKeyboard(MyApplication.getContext(), mEditText);
         mEditText.requestFocus();
         super.onResume();
     }
@@ -106,17 +105,17 @@ public class TextInputAty extends Activity{
         closeKeyboard(MyApplication.getContext(), mEditText);
     }
 
-    private void openKeyboard(Context context, View editText){
+    private void openKeyboard(Context context, View editText) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(editText, 0);
         LogUtil.d("mmga", "openKeyboard");
 
     }
 
-    private void closeKeyboard(Context context, View editText){
+    private void closeKeyboard(Context context, View editText) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        LogUtil.d("mmga","closeKeyboard");
+        LogUtil.d("mmga", "closeKeyboard");
     }
 
 }

@@ -33,4 +33,16 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFrame">@null</item>
     </style>
+
+
+    <style name="setting_text_middle" >
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="setting_text_small" >
+        <item name="android:textColor">@color/colorTextLite</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

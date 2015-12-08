@@ -28,7 +28,7 @@
 
 
         <activity
-            android:name=".Aty.AboutActivity"
+            android:name=".Aty.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/setting"/>

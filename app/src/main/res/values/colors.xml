@@ -6,6 +6,7 @@
     <color name="colorText">#727272</color>
     <color name="colorBackground">#d7d7d7</color>
     <color name="colorWhite">#f7f7f7</color>
-    <color name="colorGrayDivider">#a6a6a6</color>
+    <color name="colorGrayDivider">#cccccc</color>
+    <color name="colorTextLite">#a7a7a7</color>
 
 </resources>

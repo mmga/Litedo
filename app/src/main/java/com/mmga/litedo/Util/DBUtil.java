@@ -17,9 +17,10 @@ public class DBUtil {
      *
      * @param content
      */
-    public static void addData(String content) {
+    public static void addData(String content,long time) {
         Memo memo = new Memo();
         memo.setContent("" + content);
+        memo.setCreateTimeInMillis(time);
         memo.setCount(1);
         memo.save();
     }
@@ -45,6 +46,7 @@ public class DBUtil {
             for (int i = memoList.size() - 1; i >= 0; i--) {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());
+                mMemo.setCreateTimeInMillis(memoList.get(i).getCreateTimeInMillis());
                 mMemo.setPosition(i);
                 mList.add(mMemo);
             }
