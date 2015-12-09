@@ -14,6 +14,7 @@ import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.DateUtil;
 import com.mmga.litedo.Util.SharedPrefsUtil;
 import com.mmga.litedo.db.Model.Memo;
+import com.mmga.litedo.widget.ItemLayout;
 
 import java.util.Collections;
 import java.util.List;
@@ -137,6 +138,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public View recyclerViewItem;
         public ImageView itemEditButton;
         public TextView mCreateTime;
+        public ItemLayout mItemLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -145,6 +147,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mCreateTime = (TextView) itemView.findViewById(R.id.create_time);
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
             itemEditButton = (ImageView) itemView.findViewById(R.id.item_edit_button);
+            mItemLayout = (ItemLayout) itemView.findViewById(R.id.itemlayout);
         }
 
         @Override

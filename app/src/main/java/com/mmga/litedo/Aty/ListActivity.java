@@ -29,6 +29,7 @@ import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
+import com.mmga.litedo.widget.ItemLayout;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
@@ -190,6 +191,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     RelativeLayout platform;
     RelativeLayout itemMenu;
     ImageView itemEditButton;
+    ItemLayout itemLayout;
 
     //点击item弹出菜单
     @Override
@@ -197,6 +199,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         itemText = (TextView) view.findViewById(R.id.fg_view);
         platform = (RelativeLayout) view.findViewById(R.id.platform);
         itemMenu = (RelativeLayout) view.findViewById(R.id.item_menu);
+        itemLayout = (ItemLayout) view.findViewById(R.id.itemlayout);
         itemEditButton = (ImageView) view.findViewById(R.id.item_edit_button);
         if (itemMenu.getVisibility() == View.GONE) {
             showItemMenu();
@@ -220,13 +223,15 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private void showItemMenu() {
         itemMenu.setVisibility(View.VISIBLE);
         int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 52);
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", itemMenuWidth, 0);
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", 0, -itemMenuWidth);
-        AnimatorSet set = new AnimatorSet();
-        set.setInterpolator(new DecelerateInterpolator());
-        set.setDuration(200);
-        set.playTogether(anim1, anim2);
-        set.start();
+//        ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", itemMenuWidth, 0);
+//        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", 0, -itemMenuWidth);
+//        AnimatorSet set = new AnimatorSet();
+//        set.setInterpolator(new DecelerateInterpolator());
+//        set.setDuration(200);
+//        set.playTogether(anim1, anim2);
+//        set.start();
+        ObjectAnimator animator = ObjectAnimator.ofFloat(itemLayout, "translationX", itemMenuWidth, 0);
+        animator.start();
     }
 
     private void hideItemMenu() {

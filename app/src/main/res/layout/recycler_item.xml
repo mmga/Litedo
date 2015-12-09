@@ -6,60 +6,79 @@
     android:layout_marginTop="1dp"
     android:orientation="horizontal">
 
-
-    <RelativeLayout
-        android:id="@+id/platform"
+    <com.mmga.litedo.widget.ItemLayout
+        android:id="@+id/itemlayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@color/colorWhite">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/fg_view"
+        <RelativeLayout
+            android:id="@+id/platform"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="left|center_vertical"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textColor="@color/colorText"
-            android:textSize="22sp" />
+            android:layout_height="@dimen/item_height"
+            android:background="@color/colorWhite">
 
-        <TextView
-            android:id="@+id/create_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            <TextView
+                android:id="@+id/fg_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="left|center_vertical"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textColor="@color/colorText"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/create_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="2dp"
+                android:paddingRight="8dp"
+                android:textAppearance="@style/setting_text_small" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/item_menu"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:paddingBottom="2dp"
-            android:paddingRight="8dp"
-            android:textAppearance="@style/setting_text_small" />
-
-    </RelativeLayout>
+            android:layout_gravity="center_vertical"
+            android:visibility="gone">
 
 
-    <RelativeLayout
-        android:id="@+id/item_menu"
-        android:layout_width="52dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone">
+            <ImageView
+                android:id="@+id/item_edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/normal_rectangle_mask_selector"
+                android:paddingBottom="@dimen/item_menu_padding_vertical"
+                android:paddingLeft="@dimen/item_menu_padding_horizontal"
+                android:paddingRight="@dimen/item_menu_padding_horizontal"
+                android:paddingTop="@dimen/item_menu_padding_vertical"
+                android:src="@mipmap/ic_pencil_white_24dp" />
+
+            <ImageView
+                android:id="@+id/item_edit_123"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/normal_rectangle_mask_selector"
+                android:paddingBottom="@dimen/item_menu_padding_vertical"
+                android:paddingLeft="@dimen/item_menu_padding_horizontal"
+                android:paddingRight="@dimen/item_menu_padding_horizontal"
+                android:paddingTop="@dimen/item_menu_padding_vertical"
+                android:src="@mipmap/ic_pencil_white_24dp" />
 
 
-        <ImageView
-            android:id="@+id/item_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/normal_rectangle_mask_selector"
-            android:paddingBottom="@dimen/item_menu_padding_vertical"
-            android:paddingLeft="@dimen/item_menu_padding_horizontal"
-            android:paddingRight="@dimen/item_menu_padding_horizontal"
-            android:paddingTop="@dimen/item_menu_padding_vertical"
-            android:src="@mipmap/ic_pencil_white_24dp" />
+        </RelativeLayout>
 
 
-    </RelativeLayout>
+    </com.mmga.litedo.widget.ItemLayout>
 
 
 </RelativeLayout>
