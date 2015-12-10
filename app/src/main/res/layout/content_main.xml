@@ -8,14 +8,13 @@
     android:background="@color/colorBackground"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <com.mmga.litedo.Adapter.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="2dp"
         android:clipToPadding="false"
         android:id="@+id/recycler_view"
         android:scrollbars="vertical"
-        android:background="@color/colorBackground"
         />
 
     <TextView

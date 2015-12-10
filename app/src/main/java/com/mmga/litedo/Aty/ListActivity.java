@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,7 +31,6 @@ import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
-import com.mmga.litedo.widget.ItemLayout;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
@@ -189,18 +190,18 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     TextView itemText;
     RelativeLayout platform;
-    RelativeLayout itemMenu;
-    ImageView itemEditButton;
-    ItemLayout itemLayout;
+    LinearLayout itemMenu;
+    ImageView itemEditButton, itemRemindButton;
 
     //点击item弹出菜单
     @Override
     public void onItemClick(final View view, final Memo memo, final RecyclerViewAdapter.MyViewHolder holder) {
         itemText = (TextView) view.findViewById(R.id.fg_view);
         platform = (RelativeLayout) view.findViewById(R.id.platform);
-        itemMenu = (RelativeLayout) view.findViewById(R.id.item_menu);
-        itemLayout = (ItemLayout) view.findViewById(R.id.itemlayout);
+        itemMenu = (LinearLayout) view.findViewById(R.id.item_menu);
         itemEditButton = (ImageView) view.findViewById(R.id.item_edit_button);
+        itemRemindButton = (ImageView) view.findViewById(R.id.item_remind_button);
+
         if (itemMenu.getVisibility() == View.GONE) {
             showItemMenu();
             itemEditButton.setOnClickListener(new View.OnClickListener() {
@@ -215,27 +216,37 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                     overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
                 }
             });
+            itemRemindButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openSetAlarmDialog();
+                }
+            });
         } else {
             hideItemMenu();
         }
     }
 
+    private void openSetAlarmDialog() {
+        AlertDialog.Builder buidler = new AlertDialog.Builder(this);
+        buidler.setMessage("setTime");
+        buidler.show();
+    }
+
     private void showItemMenu() {
         itemMenu.setVisibility(View.VISIBLE);
-        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 52);
-//        ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", itemMenuWidth, 0);
-//        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", 0, -itemMenuWidth);
-//        AnimatorSet set = new AnimatorSet();
-//        set.setInterpolator(new DecelerateInterpolator());
-//        set.setDuration(200);
-//        set.playTogether(anim1, anim2);
-//        set.start();
-        ObjectAnimator animator = ObjectAnimator.ofFloat(itemLayout, "translationX", itemMenuWidth, 0);
-        animator.start();
+        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 94);
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", itemMenuWidth, 0);
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", 0, -itemMenuWidth);
+        AnimatorSet set = new AnimatorSet();
+        set.setInterpolator(new DecelerateInterpolator());
+        set.setDuration(200);
+        set.playTogether(anim1, anim2);
+        set.start();
     }
 
     private void hideItemMenu() {
-        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 52);
+        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 94);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", 0, itemMenuWidth);
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", -itemMenuWidth, 0);
         AnimatorSet set = new AnimatorSet();

@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Toolbar toolbar;
     private RelativeLayout mShowTime, mDarkTheme, mQuickMode;
     private TextView mSuggest, mRating, mLicense;
-    private CheckBox mShowTimeCheckbox, mDarkThemeCheckbox, mQuickModeCheckbox;
+    private CheckBox mShowTimeCheckbox, mQuickModeCheckbox;
 
     private boolean isShowTimeChecked;
 
@@ -51,7 +51,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mLicense = (TextView) findViewById(R.id.license);
         mShowTimeCheckbox = (CheckBox) findViewById(R.id.showtime_checkbox);
         mShowTimeCheckbox.setChecked(SharedPrefsUtil.getValue(this, "settings", "isShowTime", false));
-        mDarkThemeCheckbox = (CheckBox) findViewById(R.id.dark_theme_checkbox);
         mQuickModeCheckbox = (CheckBox) findViewById(R.id.quick_mode_checkbox);
 
 
@@ -77,9 +76,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 switchShowTimeCheckbox();
                 break;
             case R.id.dark_theme:
-                ToastUtil.showShort("这个技能还没有准备好");
-                break;
-            case R.id.dark_theme_checkbox:
                 ToastUtil.showShort("这个技能还没有准备好");
                 break;
             case R.id.quick_mode:
