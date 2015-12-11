@@ -31,6 +31,9 @@ import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
+import com.mmga.litedo.widget.HeaderExtendsView;
+
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
@@ -40,6 +43,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private FloatingActionButton fabAdd;
     private TextView noItemInfo;
     private long mCreateTime;
+    private HeaderExtendsView headerExtendsView;
 
 
     @Override
@@ -62,6 +66,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new RecyclerViewAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         mAdapter.setOnItemClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
