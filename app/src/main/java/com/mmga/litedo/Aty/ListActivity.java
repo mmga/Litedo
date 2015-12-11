@@ -207,13 +207,20 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             itemEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    hideItemMenu();
-                    Intent intent = new Intent(ListActivity.this, TextInputAty.class);
-                    intent.putExtra("data", memo.getContent());
-                    intent.putExtra("position", holder.getAdapterPosition());
-                    mCreateTime = memo.getCreateTimeInMillis();
-                    startActivityForResult(intent, 1);
-                    overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                    AnimatorSet set = hideItemMenu();
+                    set.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            Intent intent = new Intent(ListActivity.this, TextInputAty.class);
+                            intent.putExtra("data", memo.getContent());
+                            intent.putExtra("position", holder.getAdapterPosition());
+                            mCreateTime = memo.getCreateTimeInMillis();
+                            startActivityForResult(intent, 1);
+                            overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                        }
+                    });
+
                 }
             });
             itemRemindButton.setOnClickListener(new View.OnClickListener() {
@@ -245,13 +252,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         set.start();
     }
 
-    private void hideItemMenu() {
+    private AnimatorSet hideItemMenu() {
         int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 94);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(itemMenu, "translationX", 0, itemMenuWidth);
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(platform, "translationX", -itemMenuWidth, 0);
         AnimatorSet set = new AnimatorSet();
         set.setInterpolator(new DecelerateInterpolator());
-        set.setDuration(200);
+        set.setDuration(100);
         set.playTogether(anim1, anim2);
         set.start();
         set.addListener(new AnimatorListenerAdapter() {
@@ -261,6 +268,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 itemMenu.setVisibility(View.GONE);
             }
         });
+        return set;
     }
 
 
