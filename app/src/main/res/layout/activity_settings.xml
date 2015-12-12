@@ -130,7 +130,7 @@
 
 
             <RelativeLayout
-                android:id="@+id/quick_mode"
+                android:id="@+id/pull_to_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle_white_gray_selector"
@@ -138,23 +138,23 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/fast_edit"
+                    android:id="@+id/pull_to_add_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:text="快速编辑"
+                    android:text="@string/pull_to_add"
                     android:textAppearance="@style/setting_text_middle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/fast_edit"
-                    android:layout_below="@+id/fast_edit"
-                    android:text="@string/fast_edit_description"
+                    android:layout_alignLeft="@id/pull_to_add_title"
+                    android:layout_below="@+id/pull_to_add_title"
+                    android:text="@string/pull_to_add_description"
                     android:textAppearance="@style/setting_text_small" />
 
                 <CheckBox
-                    android:id="@+id/quick_mode_checkbox"
+                    android:id="@+id/pull_to_add_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

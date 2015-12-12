@@ -32,4 +32,6 @@ public class DensityUtil {
     public static DisplayMetrics getDisplayMetrics() {
         return MyApplication.getContext().getResources().getDisplayMetrics();
     }
+
+
 }

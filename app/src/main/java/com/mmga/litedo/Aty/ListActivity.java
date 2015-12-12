@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,11 +30,14 @@ import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
+import com.mmga.litedo.Util.SharedPrefsUtil;
 import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
+import com.mmga.litedo.widget.CustomPtrHeader;
 import com.mmga.litedo.widget.HeaderExtendsView;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
@@ -41,9 +45,16 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private FloatingActionButton fabAdd;
-    private TextView noItemInfo;
+        private TextView noItemInfo;
     private long mCreateTime;
+    PtrFrameLayout ptrFrameLayout;
+    RecyclerView.LayoutManager mLayoutManager;
     private HeaderExtendsView headerExtendsView;
+    CustomPtrHeader header;
+
+    private boolean mIsSwiping, mIsDraging;
+    public static boolean mCanPullDown;
+    private int pullToAddState;
 
 
     @Override
@@ -59,14 +70,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     private void init() {
         noItemInfo = (TextView) findViewById(R.id.no_item_info);
+        ptrFrameLayout = (PtrFrameLayout) findViewById(R.id.ptr_frame);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new RecyclerViewAdapter();
         mRecyclerView.setAdapter(mAdapter);
-        OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         mAdapter.setOnItemClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,11 +87,11 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ListActivity.this, TextInputAty.class);
-                startActivityForResult(i, 1);
-                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                openActivityForNew();
             }
         });
+
+        configPTR();
 
         ItemTouchHelper.Callback callback = new MySimpleCallback(mAdapter) {
             @Override
@@ -91,14 +102,50 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                     mRecyclerView.setVisibility(View.GONE);
                     noItemInfo.setVisibility(View.VISIBLE);
                 }
-
             }
+
         };
+
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
-
     }
 
+
+
+    //配置下拉刷新，只在无swipe，无drag且第一个item完全可见时启用
+    private void configPTR() {
+        pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", SettingsActivity.PULL_TO_DO_NOTHING);
+        if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
+            header = new CustomPtrHeader(this, mAdapter);
+            ptrFrameLayout.setHeaderView(header);
+            ptrFrameLayout.addPtrUIHandler(header);
+        }
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                if (mLayoutManager instanceof LinearLayoutManager) {
+                    if (((LinearLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition() == 0) {
+                        if (mAdapter.canPullDown()) {
+                            return true;
+                        }
+                    }else if (mAdapter.getItemCount() == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                Log.d("mmga", "onUIRefreshBegin");
+                if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
+                    openActivityForNew();
+                }
+                frame.refreshComplete();
+
+            }
+        });
+    }
 
     private void showUndoSnackbar() {
         final Snackbar snackbar = Snackbar.make(mRecyclerView, "Confirm Deletion?", Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
@@ -217,12 +264,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
-                            Intent intent = new Intent(ListActivity.this, TextInputAty.class);
-                            intent.putExtra("data", memo.getContent());
-                            intent.putExtra("position", holder.getAdapterPosition());
-                            mCreateTime = memo.getCreateTimeInMillis();
-                            startActivityForResult(intent, 1);
-                            overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+                            openActivityForEdit(memo, holder.getAdapterPosition());
                         }
                     });
 
@@ -239,10 +281,27 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
     }
 
+    //打开输入框，new
+    private void openActivityForNew() {
+        Intent i = new Intent(ListActivity.this, TextInputAty.class);
+        startActivityForResult(i, 1);
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+    }
+
+    //打开输入框，edit
+    private void openActivityForEdit(Memo memo, int position) {
+        Intent intent = new Intent(ListActivity.this, TextInputAty.class);
+        intent.putExtra("data", memo.getContent());
+        intent.putExtra("position", position);
+        mCreateTime = memo.getCreateTimeInMillis();
+        startActivityForResult(intent, 1);
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+    }
+
     private void openSetAlarmDialog() {
-        AlertDialog.Builder buidler = new AlertDialog.Builder(this);
-        buidler.setMessage("setTime");
-        buidler.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("setTime");
+        builder.show();
     }
 
     private void showItemMenu() {

@@ -15,7 +15,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "0.6.4"
+        versionName "0.7.0"
     }
     buildTypes {
         release {
@@ -31,7 +31,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'org.litepal.android:core:1.2.1'
-    compile 'me.everything:overscroll-decor-android:1.0.0'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 }
 
 
