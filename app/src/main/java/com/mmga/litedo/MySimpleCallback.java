@@ -11,20 +11,12 @@ import com.mmga.litedo.Util.DensityUtil;
 
 public class MySimpleCallback extends ItemTouchHelper.Callback {
 
-    public interface ItemTouchHelperAdapter {
 
-        boolean onItemMove(int fromPosition, int toPosition);
-
-        void onItemDismiss(int position);
-    }
-
-    public interface ItemTouchHelperViewHolder {
-        void onItemSelected();
-
-        void onItemClear();
-    }
 
     private final ItemTouchHelperAdapter mAdapter;
+    private boolean isSwiping;
+    private boolean isDraging;
+    public boolean canPullDown;
 
     public MySimpleCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -58,9 +50,12 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
         return true;
     }
 
+    public void canPullDown() {
+    }
+
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE||actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             if (viewHolder instanceof ItemTouchHelperViewHolder) {
                 ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
                 itemViewHolder.onItemSelected();
@@ -96,6 +91,24 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
             super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
+
+
+
+    public interface ItemTouchHelperAdapter {
+
+        boolean onItemMove(int fromPosition, int toPosition);
+
+        void onItemDismiss(int position);
+
+    }
+
+    public interface ItemTouchHelperViewHolder {
+        void onItemSelected();
+
+        void onItemClear();
+
+    }
+
 
 
 }

@@ -33,7 +33,8 @@ import com.mmga.litedo.Util.StatusBarCompat;
 import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.widget.HeaderExtendsView;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnRecyclerViewItemClickListener {
 
@@ -41,9 +42,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private FloatingActionButton fabAdd;
-    private TextView noItemInfo;
+    //    private TextView noItemInfo;
     private long mCreateTime;
+    PtrFrameLayout ptrFrameLayout;
+    RecyclerView.LayoutManager mLayoutManager;
     private HeaderExtendsView headerExtendsView;
+
+    private boolean mIsSwiping, mIsDraging;
+    public static boolean mCanPullDown;
 
 
     @Override
@@ -58,15 +64,15 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
 
     private void init() {
-        noItemInfo = (TextView) findViewById(R.id.no_item_info);
+//        noItemInfo = (TextView) findViewById(R.id.no_item_info);
+        ptrFrameLayout = (PtrFrameLayout) findViewById(R.id.ptr_frame);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new RecyclerViewAdapter();
         mRecyclerView.setAdapter(mAdapter);
-        OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         mAdapter.setOnItemClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,6 +88,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             }
         });
 
+        configPTR();
+
         ItemTouchHelper.Callback callback = new MySimpleCallback(mAdapter) {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
@@ -89,14 +97,36 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setVisibility(View.GONE);
-                    noItemInfo.setVisibility(View.VISIBLE);
+//                    noItemInfo.setVisibility(View.VISIBLE);
                 }
-
             }
+
         };
+
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
+    }
 
+    //配置下拉刷新，只在无swipe，无drag且第一个item完全可见时启用
+    private void configPTR() {
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                if (mLayoutManager instanceof LinearLayoutManager) {
+                    if (((LinearLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition() == 0) {
+                        if (mAdapter.canPullDown()) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+
+            }
+        });
     }
 
 
@@ -105,7 +135,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onClick(View v) {
                 mRecyclerView.setVisibility(View.VISIBLE);
-                noItemInfo.setVisibility(View.GONE);
+//                noItemInfo.setVisibility(View.GONE);
                 mAdapter.undoDelete();
             }
         });
@@ -133,10 +163,10 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         mAdapter.setAdapterData();
         if (mAdapter.getItemCount() == 0) {
             mRecyclerView.setVisibility(View.GONE);
-            noItemInfo.setVisibility(View.VISIBLE);
+//            noItemInfo.setVisibility(View.VISIBLE);
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
-            noItemInfo.setVisibility(View.GONE);
+//            noItemInfo.setVisibility(View.GONE);
         }
     }
 
@@ -281,7 +311,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_NEW) {
-            noItemInfo.setVisibility(View.GONE);
+//            noItemInfo.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
             Memo memo = new Memo();
             memo.setContent(data.getStringExtra("content"));

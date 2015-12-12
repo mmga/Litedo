@@ -1,6 +1,7 @@
 package com.mmga.litedo.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Memo> memoList;
     private Memo lastDeletedMemo = null;
     private int lastDeletedMemoPosition;
+    private boolean canPullDown = true;
 
     public RecyclerViewAdapter() {
     }
@@ -111,6 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
+
     public void addData(Memo newMemo) {
         memoList.add(0, newMemo);
         notifyItemInserted(0);
@@ -152,13 +155,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onItemSelected() {
             recyclerViewItem.setScaleY(0.95f);
+            canPullDown = false;
+            Log.d("mmga", "canPullDownFalse");
         }
 
         @Override
         public void onItemClear() {
             recyclerViewItem.setScaleY(1f);
+            canPullDown = true;
+            Log.d("mmga", "canPullDownTrue");
         }
+
     }
 
-
+    public boolean canPullDown() {
+        return canPullDown;
+    }
 }
