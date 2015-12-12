@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header_layout"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="200dp"
+    android:background="@color/colorBackground"
+    >
 
     <ImageView
         android:id="@+id/header_view"
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#123456" />
+        android:layout_height="60dp"
+        android:background="@color/colorWhite"
+        />
 
 </LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,23 +24,14 @@
         cube_ptr:ptr_duration_to_close_header="300"
         cube_ptr:ptr_keep_header_when_refresh="false"
         cube_ptr:ptr_pull_to_fresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="0.5"
         cube_ptr:ptr_resistance="2">
 
-
-        <LinearLayout
-            android:id="@+id/store_house_ptr_image_content"
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#9e9e9e"
-            android:clickable="true"
-            android:padding="10dp">
+            android:background="@color/colorBackground"/>
 
-            <ImageView
-                android:id="@+id/store_house_ptr_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -62,4 +53,4 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
-</LinearLayout>
+</RelativeLayout>

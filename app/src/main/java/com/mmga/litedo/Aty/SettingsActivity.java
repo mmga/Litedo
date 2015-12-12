@@ -1,9 +1,11 @@
 package com.mmga.litedo.Aty;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -18,11 +20,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private RelativeLayout mShowTime, mDarkTheme, mQuickMode;
+    private RelativeLayout mShowTime, mDarkTheme, mPullToAdd;
     private TextView mSuggest, mRating, mLicense;
-    private CheckBox mShowTimeCheckbox, mQuickModeCheckbox;
+    private CheckBox mShowTimeCheckbox, mPullToAddCheckbox;
 
     private boolean isShowTimeChecked;
+    public static final int PULL_TO_ADD = 0;
+    public static final int PULL_TO_DO_NOTHING = 1;
+    private int pullToAddState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
         StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
 
+        isShowTimeChecked = SharedPrefsUtil.getValue(this, "settings", "isShowTime", false);
+        pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", PULL_TO_DO_NOTHING);
+        Log.d("mmga", "" + pullToAddState);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,25 +54,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         mShowTime = (RelativeLayout) findViewById(R.id.showtime);
         mDarkTheme = (RelativeLayout) findViewById(R.id.dark_theme);
-        mQuickMode = (RelativeLayout) findViewById(R.id.quick_mode);
+        mPullToAdd = (RelativeLayout) findViewById(R.id.pull_to_add);
         mSuggest = (TextView) findViewById(R.id.suggest);
         mRating = (TextView) findViewById(R.id.rating);
         mLicense = (TextView) findViewById(R.id.license);
         mShowTimeCheckbox = (CheckBox) findViewById(R.id.showtime_checkbox);
-        mShowTimeCheckbox.setChecked(SharedPrefsUtil.getValue(this, "settings", "isShowTime", false));
-        mQuickModeCheckbox = (CheckBox) findViewById(R.id.quick_mode_checkbox);
+        mShowTimeCheckbox.setChecked(isShowTimeChecked);
+        mPullToAddCheckbox = (CheckBox) findViewById(R.id.pull_to_add_checkbox);
+        mPullToAddCheckbox.setChecked(pullToAddState == PULL_TO_ADD);
 
 
         mShowTime.setOnClickListener(this);
         mDarkTheme.setOnClickListener(this);
-        mQuickMode.setOnClickListener(this);
+        mPullToAdd.setOnClickListener(this);
         mSuggest.setOnClickListener(this);
         mRating.setOnClickListener(this);
         mLicense.setOnClickListener(this);
         mShowTimeCheckbox.setOnClickListener(this);
-
-        isShowTimeChecked = SharedPrefsUtil.getValue(this, "settings", "isShowTime", false);
-
 
     }
 
@@ -75,14 +82,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.showtime:
                 switchShowTimeCheckbox();
                 break;
+            case R.id.pull_to_add_checkbox:
+                switchPullToAddCheckbox();
+            case R.id.pull_to_add:
+                switchPullToAddCheckbox();
+                break;
             case R.id.dark_theme:
                 ToastUtil.showShort("这个技能还没有准备好");
-                break;
-            case R.id.quick_mode:
-                ToastUtil.showShort("冷却中");
-                break;
-            case R.id.quick_mode_checkbox:
-                ToastUtil.showShort("冷却中");
                 break;
             case R.id.suggest:
                 ToastUtil.showShort("我还不能使用这个技能");
@@ -95,6 +101,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
 
+    }
+
+    private void switchPullToAddCheckbox() {
+        if (!mPullToAddCheckbox.isChecked()) {
+            mPullToAddCheckbox.setChecked(true);
+            pullToAddState = PULL_TO_ADD;
+        } else {
+            mPullToAddCheckbox.setChecked(false);
+            pullToAddState = PULL_TO_DO_NOTHING;
+        }
     }
 
     private void switchShowTimeCheckbox() {
@@ -110,6 +126,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPrefsUtil.putValue(this, "settings", "isShowTime", isShowTimeChecked);
+        SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
+        editor.putBoolean("isShowTime", isShowTimeChecked);
+        editor.putInt("pullToAddState", pullToAddState);
+        editor.commit();
+
+//        SharedPrefsUtil.putValue(this, "settings", "isShowTime", isShowTimeChecked);
+//        SharedPrefsUtil.putValue(this, "settings", "pullToAddState", pullToAddState);
+//        Log.d("mmga", "" + pullToAddState);
+
     }
 }
