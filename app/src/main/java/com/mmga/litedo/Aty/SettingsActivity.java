@@ -129,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
         editor.putBoolean("isShowTime", isShowTimeChecked);
         editor.putInt("pullToAddState", pullToAddState);
-        editor.commit();
+        editor.apply();
 
 //        SharedPrefsUtil.putValue(this, "settings", "isShowTime", isShowTimeChecked);
 //        SharedPrefsUtil.putValue(this, "settings", "pullToAddState", pullToAddState);

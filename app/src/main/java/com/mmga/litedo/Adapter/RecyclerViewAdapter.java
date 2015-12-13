@@ -106,10 +106,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onItemDismiss(int position) {
-        lastDeletedMemo = memoList.get(position);
-        lastDeletedMemoPosition = position;
-        memoList.remove(position);
-        notifyItemRemoved(position);
+        deleteData(position);
     }
 
 
@@ -117,6 +114,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void addData(Memo newMemo) {
         memoList.add(0, newMemo);
         notifyItemInserted(0);
+    }
+
+    public void deleteData(int position) {
+        lastDeletedMemo = memoList.get(position);
+        lastDeletedMemoPosition = position;
+        memoList.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void undoDelete() {

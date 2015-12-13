@@ -57,6 +57,7 @@ public class CustomPtrHeader extends RelativeLayout implements PtrUIHandler {
     @Override
     public void onUIRefreshPrepare(PtrFrameLayout frame) {
         Log.d("mmga", "onUIRefreshPrepare");
+        imageView.setVisibility(VISIBLE);
     }
 
     @Override
@@ -72,15 +73,27 @@ public class CustomPtrHeader extends RelativeLayout implements PtrUIHandler {
     @Override
     public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
         float percent = Math.min(1f, ptrIndicator.getCurrentPercent());
-        imageView.setTranslationY(DensityUtil.dip2px(getContext(), 60) * (1 - 2 * percent));
-        imageView.setScaleX((float) (Math.min(0.8 + 0.4 * percent, 1f)));
-        imageView.setScaleY((float) (Math.min(0.9 + 0.2 * percent, 1f)));
+        if (isUnderTouch) {
+            if (percent > 0.5) {
+                flagAdd = ADD_NEW_MEMO;
+            } else {
+                flagAdd = CANCEL_NEW_MEMO;
+            }
 
-        if (percent > 0.5) {
-            flagAdd = ADD_NEW_MEMO;
+            imageView.setTranslationY(DensityUtil.dip2px(getContext(), 60) * (1 - 2 * percent));
+            imageView.setScaleX((float) (Math.min(0.8 + 0.4 * percent, 1f)));
+            imageView.setScaleY((float) (Math.min(0.9 + 0.2 * percent, 1f)));
         } else {
-            flagAdd = CANCEL_NEW_MEMO;
+            int flag = flagAdd;
+            if (flag == ADD_NEW_MEMO) {
+                imageView.setVisibility(GONE);
+            } else {
+                imageView.setTranslationY(DensityUtil.dip2px(getContext(), 60) * (1 - 2 * percent));
+                imageView.setScaleX((float) (Math.min(0.8 + 0.4 * percent, 1f)));
+                imageView.setScaleY((float) (Math.min(0.9 + 0.2 * percent, 1f)));
+            }
         }
+
         invalidate();
 
 

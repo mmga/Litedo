@@ -136,12 +136,21 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             }
 
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
+            public void onRefreshBegin(final PtrFrameLayout frame) {
                 Log.d("mmga", "onUIRefreshBegin");
                 if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
-                    openActivityForNew();
+                    final Memo memo = new Memo();
+                    memo.setCreateTimeInMillis(System.currentTimeMillis());
+                    mAdapter.addData(memo);
+                    mRecyclerView.getItemAnimator().isRunning(new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
+                        @Override
+                        public void onAnimationsFinished() {
+                            openActivityForEdit(memo,0);
+                            frame.refreshComplete();
+                        }
+                    });
+//                    openActivityForNew();
                 }
-                frame.refreshComplete();
 
             }
         });
@@ -349,10 +358,15 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             mRecyclerView.smoothScrollToPosition(0);
         } else if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_EDIT) {
             Memo memo = new Memo();
-            memo.setContent(data.getStringExtra("content"));
             int position = data.getIntExtra("position", 0);
-            memo.setCreateTimeInMillis(mCreateTime);
-            mAdapter.updateData(position, memo);
+            if (data.getStringExtra("content").equals("")) {
+                mAdapter.deleteData(position);
+            } else {
+                memo.setContent(data.getStringExtra("content"));
+                memo.setCreateTimeInMillis(mCreateTime);
+                mAdapter.updateData(position, memo);
+            }
+
         }
     }
 
