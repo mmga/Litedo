@@ -17,7 +17,7 @@ public class DBUtil {
      *
      * @param content
      */
-    public static void addData(String content,long time) {
+    public static void addData(String content, long time) {
         Memo memo = new Memo();
         memo.setContent("" + content);
         memo.setCreateTimeInMillis(time);
@@ -38,6 +38,7 @@ public class DBUtil {
 
     /**
      * 同步list的数据至数据库
+     *
      * @param memoList
      */
     public static void syncData(List<Memo> memoList) {
@@ -47,6 +48,7 @@ public class DBUtil {
                 Memo mMemo = new Memo();
                 mMemo.setContent(memoList.get(i).getContent());
                 mMemo.setCreateTimeInMillis(memoList.get(i).getCreateTimeInMillis());
+                mMemo.setTop(memoList.get(i).getTop());
                 mMemo.setPosition(i);
                 mList.add(mMemo);
             }
@@ -56,4 +58,8 @@ public class DBUtil {
         }
     }
 
+
+    public static int getPinNumber() {
+        return DataSupport.where("Top = ?", "1").count(Memo.class);
+    }
 }
