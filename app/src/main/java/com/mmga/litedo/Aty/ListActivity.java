@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.mmga.litedo.Adapter.RecyclerViewAdapter;
 import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
+import com.mmga.litedo.Util.DBUtil;
 import com.mmga.litedo.Util.DensityUtil;
 import com.mmga.litedo.Util.LogUtil;
 import com.mmga.litedo.Util.SharedPrefsUtil;
@@ -45,12 +46,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private FloatingActionButton fabAdd;
-        private TextView noItemInfo;
+    private TextView noItemInfo;
     private long mCreateTime;
     PtrFrameLayout ptrFrameLayout;
     RecyclerView.LayoutManager mLayoutManager;
     private HeaderExtendsView headerExtendsView;
     CustomPtrHeader header;
+    int mPinNumber;
 
     private boolean mIsSwiping, mIsDraging;
     public static boolean mCanPullDown;
@@ -101,6 +103,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setVisibility(View.GONE);
                     noItemInfo.setVisibility(View.VISIBLE);
+                    mPinNumber--;
                 }
             }
 
@@ -112,7 +115,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
 
 
-    //配置下拉刷新，只在无swipe，无drag且第一个item完全可见时启用
     private void configPTR() {
         pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", SettingsActivity.PULL_TO_DO_NOTHING);
         if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
@@ -121,6 +123,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             ptrFrameLayout.addPtrUIHandler(header);
         }
         ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            //配置下拉刷新，只在无swipe，无drag且第一个item完全可见时启用
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
                 if (mLayoutManager instanceof LinearLayoutManager) {
@@ -128,7 +131,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                         if (mAdapter.canPullDown()) {
                             return true;
                         }
-                    }else if (mAdapter.getItemCount() == 0) {
+                    } else if (mAdapter.getItemCount() == 0) {
                         return true;
                     }
                 }
@@ -136,12 +139,22 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             }
 
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
+            public void onRefreshBegin(final PtrFrameLayout frame) {
                 Log.d("mmga", "onUIRefreshBegin");
                 if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
-                    openActivityForNew();
+                    final Memo memo = new Memo();
+                    memo.setCreateTimeInMillis(System.currentTimeMillis());
+//                    mAdapter.addData(memo,mPinNumber);
+                    mRecyclerView.getItemAnimator().isRunning(new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
+                        @Override
+                        public void onAnimationsFinished() {
+                            openActivityForNew();
+//                            openActivityForEdit(memo,mPinNumber);
+                            frame.refreshComplete();
+                        }
+                    });
+//                    openActivityForNew();
                 }
-                frame.refreshComplete();
 
             }
         });
@@ -230,6 +243,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onResume() {
         super.onResume();
+        mPinNumber = DBUtil.getPinNumber();
+        Log.d("mmga","mPinNumber = "+mPinNumber);
         fabAdd.setVisibility(View.VISIBLE);
     }
 
@@ -243,7 +258,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     TextView itemText;
     RelativeLayout platform;
     LinearLayout itemMenu;
-    ImageView itemEditButton, itemRemindButton;
+    ImageView itemEditButton, itemPinButton;
 
     //点击item弹出菜单
     @Override
@@ -252,10 +267,11 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         platform = (RelativeLayout) view.findViewById(R.id.platform);
         itemMenu = (LinearLayout) view.findViewById(R.id.item_menu);
         itemEditButton = (ImageView) view.findViewById(R.id.item_edit_button);
-        itemRemindButton = (ImageView) view.findViewById(R.id.item_remind_button);
+        itemPinButton = (ImageView) view.findViewById(R.id.item_pin_button);
 
         if (itemMenu.getVisibility() == View.GONE) {
             showItemMenu();
+            //编辑按钮点击事件
             itemEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -270,10 +286,28 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
                 }
             });
-            itemRemindButton.setOnClickListener(new View.OnClickListener() {
+            //置顶按钮点击事件
+            itemPinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openSetAlarmDialog();
+                    AnimatorSet set = hideItemMenu();
+                    set.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            if (memo.getTop() == Memo.TOP_NORMAL) {
+                                memo.setTop(Memo.TOP_PIN);
+                                holder.pinStateImage.setVisibility(View.VISIBLE);
+                                mAdapter.moveData(memo, holder.getAdapterPosition(), 0);
+                                mPinNumber++;
+                            } else {
+                                memo.setTop(Memo.TOP_NORMAL);
+                                holder.pinStateImage.setVisibility(View.GONE);
+                                mAdapter.moveData(memo, holder.getAdapterPosition(), mPinNumber - 1);
+                                mPinNumber--;
+                            }
+                        }
+                    });
                 }
             });
         } else {
@@ -345,14 +379,19 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             Memo memo = new Memo();
             memo.setContent(data.getStringExtra("content"));
             memo.setCreateTimeInMillis(data.getLongExtra("time", 0));
-            mAdapter.addData(memo);
+            mAdapter.addData(memo, mPinNumber);
             mRecyclerView.smoothScrollToPosition(0);
         } else if (requestCode == 1 && resultCode == TextInputAty.RESULT_CODE_EDIT) {
             Memo memo = new Memo();
-            memo.setContent(data.getStringExtra("content"));
             int position = data.getIntExtra("position", 0);
-            memo.setCreateTimeInMillis(mCreateTime);
-            mAdapter.updateData(position, memo);
+            if (data.getStringExtra("content").equals("")) {
+                mAdapter.deleteData(position);
+            } else {
+                memo.setContent(data.getStringExtra("content"));
+                memo.setCreateTimeInMillis(mCreateTime);
+                mAdapter.updateData(position, memo);
+            }
+
         }
     }
 

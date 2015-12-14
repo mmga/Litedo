@@ -64,7 +64,7 @@
             android:background="@color/colorWhite" />
 
         <ImageView
-            android:id="@+id/item_remind_button"
+            android:id="@+id/item_pin_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -73,9 +73,17 @@
             android:paddingLeft="@dimen/item_menu_padding_horizontal"
             android:paddingRight="@dimen/item_menu_padding_horizontal"
             android:paddingTop="@dimen/item_menu_padding_vertical"
-            android:src="@mipmap/ic_bell_ring_outline_white_24dp" />
-
+            android:src="@mipmap/ic_pin_white_24dp" />
 
     </LinearLayout>
 
+
+    <ImageView android:id="@+id/pin_state"
+        android:layout_width="44dp"
+        android:layout_height="5dp"
+        android:background="@color/colorAccent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:visibility="gone"
+        />
 </RelativeLayout>

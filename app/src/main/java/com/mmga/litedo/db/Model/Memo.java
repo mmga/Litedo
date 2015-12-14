@@ -5,6 +5,9 @@ import org.litepal.crud.DataSupport;
 
 public class Memo extends DataSupport{
 
+    public static final int TOP_PIN = 1;
+    public static final int TOP_NORMAL = 0;
+
     private int id;
 
     private String content;

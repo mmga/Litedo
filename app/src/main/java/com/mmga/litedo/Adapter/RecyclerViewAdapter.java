@@ -68,6 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         } else {
             holder.mCreateTime.setVisibility(View.GONE);
         }
+        holder.pinStateImage.setVisibility(memoList.get(position).getTop() == Memo.TOP_PIN ? View.VISIBLE : View.GONE);
         holder.itemView.setTag(R.id.tag_first, memoList.get(position));
         holder.itemView.setTag(R.id.tag_second, holder);
     }
@@ -106,17 +107,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onItemDismiss(int position) {
+        deleteData(position);
+    }
+
+
+    public void addData(Memo newMemo,int position) {
+        memoList.add(position, newMemo);
+        notifyItemInserted(position);
+    }
+
+    public void deleteData(int position) {
         lastDeletedMemo = memoList.get(position);
         lastDeletedMemoPosition = position;
         memoList.remove(position);
         notifyItemRemoved(position);
-    }
-
-
-
-    public void addData(Memo newMemo) {
-        memoList.add(0, newMemo);
-        notifyItemInserted(0);
     }
 
     public void undoDelete() {
@@ -129,6 +133,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyItemChanged(position);
     }
 
+    public void moveData(Memo memo, int fromPosition,int toPosition) {
+        memoList.remove(fromPosition);
+        memoList.add(toPosition, memo);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+
     public void syncMemo() {
         DBUtil.syncData(memoList);
     }
@@ -140,7 +151,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public View recyclerViewItem;
         public ImageView itemEditButton;
         public TextView mCreateTime;
-        public ImageView itemRemindButton;
+        public ImageView itemPinButton;
+        public ImageView pinStateImage;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -149,7 +161,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mCreateTime = (TextView) itemView.findViewById(R.id.create_time);
             recyclerViewItem = itemView.findViewById(R.id.recycler_view_item);
             itemEditButton = (ImageView) itemView.findViewById(R.id.item_edit_button);
-            itemRemindButton = (ImageView) itemView.findViewById(R.id.item_remind_button);
+            itemPinButton = (ImageView) itemView.findViewById(R.id.item_pin_button);
+            pinStateImage = (ImageView) itemView.findViewById(R.id.pin_state);
         }
 
         @Override
