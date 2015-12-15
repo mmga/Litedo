@@ -1,4 +1,4 @@
-package com.mmga.litedo.Util;
+package com.mmga.litedo.db;
 
 import com.mmga.litedo.db.Model.Memo;
 

@@ -35,12 +35,13 @@ public class ScrollingFABBehavior extends CoordinatorLayout.Behavior<FloatingAct
             Log.d("mmga", "dy1 = " + dy);
             hide();
             isAnimating = true;
-        } else if (dy < -20 && !isAnimating && child.getVisibility() == View.GONE) {
+        } else if (dy < 0 && !isAnimating && child.getVisibility() == View.GONE) {
             Log.d("mmga", "dy2 = " + dy);
             show();
             isAnimating = true;
         }
     }
+
 
 
     private void hide() {

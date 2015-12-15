@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 
 
 
-
+//暂时没用
 public class TextInputDialog extends Dialog {
 
     private EditText mEditText;

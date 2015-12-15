@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.db.DBUtil;
 
 
 public class WelcomeActivity extends Activity {

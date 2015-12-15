@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DBUtil;
+import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.Util.DateUtil;
 import com.mmga.litedo.Util.SharedPrefsUtil;
 import com.mmga.litedo.db.Model.Memo;
@@ -153,6 +155,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView mCreateTime;
         public ImageView itemPinButton;
         public ImageView pinStateImage;
+        public RelativeLayout platform;
+        public LinearLayout itemMenu;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -163,6 +168,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemEditButton = (ImageView) itemView.findViewById(R.id.item_edit_button);
             itemPinButton = (ImageView) itemView.findViewById(R.id.item_pin_button);
             pinStateImage = (ImageView) itemView.findViewById(R.id.pin_state);
+            platform = (RelativeLayout) itemView.findViewById(R.id.platform);
+            itemMenu = (LinearLayout) itemView.findViewById(R.id.item_menu);
         }
 
         @Override

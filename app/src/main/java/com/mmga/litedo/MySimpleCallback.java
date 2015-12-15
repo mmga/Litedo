@@ -12,11 +12,8 @@ import com.mmga.litedo.Util.DensityUtil;
 public class MySimpleCallback extends ItemTouchHelper.Callback {
 
 
-
     private final ItemTouchHelperAdapter mAdapter;
-    private boolean isSwiping;
-    private boolean isDraging;
-    public boolean canPullDown;
+    int pinNumber;
 
     public MySimpleCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -40,6 +37,17 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
         mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 
+
+    @Override
+    public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
+        int position = pinNumber - 1;
+        if ((current.getAdapterPosition() > position && target.getAdapterPosition() <= position)
+                || ((current.getAdapterPosition() <= position && target.getAdapterPosition() > position))) {
+            return false;
+        }
+        return super.canDropOver(recyclerView, current, target);
+    }
+
     @Override
     public boolean isLongPressDragEnabled() {
         return true;
@@ -50,12 +58,11 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
         return true;
     }
 
-    public void canPullDown() {
-    }
+
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE||actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE || actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             if (viewHolder instanceof ItemTouchHelperViewHolder) {
                 ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
                 itemViewHolder.onItemSelected();
@@ -93,6 +100,9 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
     }
 
 
+    public void setPinNumber(int pinNumber) {
+        this.pinNumber = pinNumber;
+    }
 
     public interface ItemTouchHelperAdapter {
 
@@ -108,7 +118,6 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
         void onItemClear();
 
     }
-
 
 
 }

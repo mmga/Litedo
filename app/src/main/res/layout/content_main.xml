@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
@@ -40,7 +39,6 @@
             android:clipToPadding="false"
             android:paddingTop="2dp"
             android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 
     </in.srain.cube.views.ptr.PtrFrameLayout>

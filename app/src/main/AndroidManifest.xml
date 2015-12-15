@@ -34,7 +34,7 @@
             android:label="@string/setting"/>
 
         <activity
-            android:name=".Aty.TextInputAty"
+            android:name=".Aty.TextInputActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Dialog" />

@@ -18,7 +18,7 @@ import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.LogUtil;
 
-public class TextInputAty extends Activity {
+public class TextInputActivity extends Activity {
 
     private EditText mEditText;
 
@@ -37,6 +37,7 @@ public class TextInputAty extends Activity {
         Intent intent = getIntent();
         final String data = intent.getStringExtra("data");
         final int position = intent.getIntExtra("position", -1);
+
 
         if (data != null) {
             mEditText.setText(data);
@@ -80,7 +81,6 @@ public class TextInputAty extends Activity {
         Intent intent = new Intent();
         intent.putExtra("content", mEditText.getText().toString());
         intent.putExtra("time", System.currentTimeMillis());
-
         if (position == -1) {
             setResult(RESULT_CODE_NEW, intent);
             finish();
