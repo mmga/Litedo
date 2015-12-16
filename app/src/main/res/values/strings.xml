@@ -13,9 +13,9 @@
     <string name="fast_edit_description">取消弹出输入栏，直接在便签上添加/编辑</string>
     <string name="pull_to_add">下拉新建</string>
     <string name="pull_to_add_description">顶部下拉新建便签,重启后生效</string>
-
-
-
+    <string name="license">版权说明</string>
+    <string name="license_description">GPL v3</string>
+    <string name="rating">给个好评</string>
 
 
     <string name="justnow">刚刚</string>

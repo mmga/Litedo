@@ -20,8 +20,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private RelativeLayout mShowTime, mDarkTheme, mPullToAdd;
-    private TextView mSuggest, mRating, mLicense;
+    private RelativeLayout mShowTime, mPullToAdd,mLicense;
+    private TextView mSuggest, mRating;
     private CheckBox mShowTimeCheckbox, mPullToAddCheckbox;
 
     private boolean isShowTimeChecked;
@@ -53,11 +53,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
         mShowTime = (RelativeLayout) findViewById(R.id.showtime);
-        mDarkTheme = (RelativeLayout) findViewById(R.id.dark_theme);
         mPullToAdd = (RelativeLayout) findViewById(R.id.pull_to_add);
         mSuggest = (TextView) findViewById(R.id.suggest);
         mRating = (TextView) findViewById(R.id.rating);
-        mLicense = (TextView) findViewById(R.id.license);
+        mLicense = (RelativeLayout) findViewById(R.id.license_layout);
         mShowTimeCheckbox = (CheckBox) findViewById(R.id.showtime_checkbox);
         mShowTimeCheckbox.setChecked(isShowTimeChecked);
         mPullToAddCheckbox = (CheckBox) findViewById(R.id.pull_to_add_checkbox);
@@ -65,7 +64,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
         mShowTime.setOnClickListener(this);
-        mDarkTheme.setOnClickListener(this);
         mPullToAdd.setOnClickListener(this);
         mSuggest.setOnClickListener(this);
         mRating.setOnClickListener(this);
@@ -87,20 +85,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.pull_to_add:
                 switchPullToAddCheckbox();
                 break;
-            case R.id.dark_theme:
-                ToastUtil.showShort("这个技能还没有准备好");
-                break;
             case R.id.suggest:
-                ToastUtil.showShort("我还不能使用这个技能");
+                ToastUtil.showShort("假的");
                 break;
             case R.id.rating:
-                ToastUtil.showShort("我还不能使用这个技能");
+                ToastUtil.showShort("是假的");
                 break;
-            case R.id.license:
-                ToastUtil.showShort("我还不能使用这个技能");
+            case R.id.license_layout:
+                ToastUtil.showShort("是头发的特技");
                 break;
         }
-
     }
 
     private void switchPullToAddCheckbox() {

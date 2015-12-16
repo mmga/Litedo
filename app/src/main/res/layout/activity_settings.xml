@@ -119,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 
@@ -158,7 +158,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 
@@ -166,29 +166,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="2px"
                 android:background="@color/colorGrayDivider" />
-
-            <RelativeLayout
-                android:id="@+id/dark_theme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_white_gray_selector"
-                android:clickable="true"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="主题颜色"
-                    android:textAppearance="@style/setting_text_middle" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2px"
-                android:background="@color/colorGrayDivider" />
-
 
             <TextView
                 android:layout_width="match_parent"
@@ -203,9 +180,9 @@
                 android:id="@+id/suggest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_white_gray_selector"
                 android:clickable="true"
                 android:padding="16dp"
-                android:background="@drawable/rectangle_white_gray_selector"
                 android:text="反馈建议"
                 android:textAppearance="@style/setting_text_middle" />
 
@@ -218,10 +195,10 @@
                 android:id="@+id/rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_white_gray_selector"
                 android:clickable="true"
                 android:padding="16dp"
-                android:background="@drawable/rectangle_white_gray_selector"
-                android:text="给个好评"
+                android:text="@string/rating"
                 android:textAppearance="@style/setting_text_middle" />
 
             <View
@@ -229,15 +206,30 @@
                 android:layout_height="2px"
                 android:background="@color/colorGrayDivider" />
 
-            <TextView
-                android:id="@+id/license"
+            <RelativeLayout
+                android:id="@+id/license_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="16dp"
-                android:text="版权说明"
                 android:background="@drawable/rectangle_white_gray_selector"
-                android:textAppearance="@style/setting_text_middle" />
+                android:clickable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/license"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/license"
+                    android:textAppearance="@style/setting_text_middle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/license"
+                    android:layout_below="@+id/license"
+                    android:text="@string/license_description"
+                    android:textAppearance="@style/setting_text_small" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>

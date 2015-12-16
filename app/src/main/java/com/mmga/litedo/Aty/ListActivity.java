@@ -111,7 +111,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-
     private void configPTR() {
         pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", SettingsActivity.PULL_TO_DO_NOTHING);
         if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
@@ -151,7 +150,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                         }
                     });
                 }
-
             }
         });
     }
@@ -258,7 +256,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     List<RecyclerViewAdapter.MyViewHolder> openedMenuStack = new ArrayList<>();
 
     private void closeOtherMenu() {
-        for (RecyclerViewAdapter.MyViewHolder holder:openedMenuStack) {
+        for (RecyclerViewAdapter.MyViewHolder holder : openedMenuStack) {
             if (holder != currentOpenedHolder) {
                 hideItemMenu(holder);
             }
@@ -278,7 +276,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             openedMenuStack.add(holder);
             currentOpenedHolder = holder;
             closeOtherMenu();
-            if (lastOpenedHolder!=null) {
+            if (lastOpenedHolder != null) {
                 Log.d("mmga", "lastOpenedHolder");
                 openedMenuStack.remove(lastOpenedHolder);
             }
@@ -347,7 +345,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     //打开输入框，edit
     private void openActivityForEdit(Memo memo, int position) {
         Intent intent = new Intent(ListActivity.this, TextInputActivity.class);
-        //用bundle传parcelable如何? // TODO: 2015/12/15
+        //用bundle传parcelable? // TODO: 2015/12/15
         intent.putExtra("data", memo.getContent());
         intent.putExtra("position", position);
         mCreateTime = memo.getCreateTimeInMillis();

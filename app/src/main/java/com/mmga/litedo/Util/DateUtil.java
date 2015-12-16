@@ -59,10 +59,24 @@ public class DateUtil {
         return MyApplication.getContext().getResources().getString(resId);
     }
 
+    static String hourString;
+    static String minuteString;
 
     public static String detailedTime(long time) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
-        return String.format("%d-%d %d:%d", cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
+        int month = cal.get(Calendar.MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        hourString = ""+hour;
+        if (hour < 10) {
+            hourString = "0" + hour;
+        }
+        int minute = cal.get(Calendar.MINUTE);
+        minuteString = "" + minute;
+        if (minute < 10) {
+            minuteString = "0" + minute;
+        }
+        return String.valueOf(month) + "-" + day + " " + hourString + ":" + minuteString;
     }
 }
