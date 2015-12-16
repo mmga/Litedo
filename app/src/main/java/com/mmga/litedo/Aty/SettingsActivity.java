@@ -1,6 +1,8 @@
 package com.mmga.litedo.Aty;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +16,12 @@ import android.widget.TextView;
 import com.mmga.litedo.R;
 import com.mmga.litedo.Util.SharedPrefsUtil;
 import com.mmga.litedo.Util.StatusBarCompat;
-import com.mmga.litedo.Util.ToastUtil;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private RelativeLayout mShowTime, mPullToAdd,mLicense;
+    private RelativeLayout mShowTime, mPullToAdd, mLicense;
     private TextView mSuggest, mRating;
     private CheckBox mShowTimeCheckbox, mPullToAddCheckbox;
 
@@ -86,15 +87,35 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 switchPullToAddCheckbox();
                 break;
             case R.id.suggest:
-                ToastUtil.showShort("假的");
+                sendEmail();
+//                ToastUtil.showShort("假的");
                 break;
             case R.id.rating:
-                ToastUtil.showShort("是假的");
+                openMarket();
+//                ToastUtil.showShort("是假的");
                 break;
             case R.id.license_layout:
-                ToastUtil.showShort("是头发的特技");
+//                ToastUtil.showShort("是头发的特技");
                 break;
         }
+    }
+
+    private void sendEmail() {
+        Uri uri = Uri.parse("mailto:1034752946@qq.com");
+        String[] email = {"1034752946@qq.com"};
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
+        intent.putExtra(Intent.EXTRA_SUBJECT, "这是邮件的主题部分"); // 主题
+        intent.putExtra(Intent.EXTRA_TEXT, "这是邮件的正文部分"); // 正文
+        startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
+    }
+
+
+    private void openMarket() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void switchPullToAddCheckbox() {

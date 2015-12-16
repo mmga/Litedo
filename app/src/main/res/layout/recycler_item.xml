@@ -33,6 +33,14 @@
             android:paddingRight="8dp"
             android:textAppearance="@style/setting_text_small" />
 
+        <ImageView
+            android:id="@+id/pin_state"
+            android:src="@mipmap/ic_pin_18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 
@@ -77,13 +85,4 @@
 
     </LinearLayout>
 
-
-    <ImageView android:id="@+id/pin_state"
-        android:layout_width="44dp"
-        android:layout_height="5dp"
-        android:background="@color/colorAccent"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="2dp"
-        android:visibility="gone"
-        />
 </RelativeLayout>

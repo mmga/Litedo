@@ -4,7 +4,12 @@ import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 
+import com.mmga.litedo.R;
+
 public class CustomFab extends FloatingActionButton {
+
+    FloatingActionButton fab;
+
     public CustomFab(Context context) {
         super(context);
         init(context);
@@ -21,6 +26,7 @@ public class CustomFab extends FloatingActionButton {
     }
 
     private void init(Context context) {
+        fab = (FloatingActionButton) findViewById(R.id.fab_add);
     }
 
     @Override
