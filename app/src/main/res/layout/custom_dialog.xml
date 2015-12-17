@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="60dp"
-    android:background="@color/colorPrimaryDark">
+    >
 
     <EditText
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="5dp"
 
         android:layout_width="0dp"
@@ -29,7 +30,7 @@
         android:layout_marginLeft="1dp"
         android:id="@+id/btn_ok"
         android:background="@color/colorAccent"
-        android:src="@drawable/check"
+        android:src="@mipmap/ic_check_white_18dp"
         />
 
 

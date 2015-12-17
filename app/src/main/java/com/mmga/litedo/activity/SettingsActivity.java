@@ -1,10 +1,11 @@
-package com.mmga.litedo.Aty;
+package com.mmga.litedo.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,7 +21,6 @@ import com.mmga.litedo.Util.StatusBarCompat;
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarLayout appBarLayout;
-    private Toolbar toolbar;
     private RelativeLayout mShowTime, mPullToAdd, mLicense;
     private TextView mSuggest, mRating;
     private CheckBox mShowTimeCheckbox, mPullToAddCheckbox;
@@ -35,14 +35,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        StatusBarCompat.compat(this, getResources().getColor(R.color.colorPrimaryDark));
+        StatusBarCompat.compat(this, ContextCompat.getColor(this, R.color.colorPrimaryDark));
 
         isShowTimeChecked = SharedPrefsUtil.getValue(this, "settings", "isShowTime", false);
         pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", PULL_TO_DO_NOTHING);
         Log.d("mmga", "" + pullToAddState);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.setting);
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_left_white_24dp);

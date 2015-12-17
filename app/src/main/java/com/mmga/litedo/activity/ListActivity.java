@@ -1,4 +1,4 @@
-package com.mmga.litedo.Aty;
+package com.mmga.litedo.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -48,11 +48,11 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private CustomFab fabAdd;
     private TextView noItemInfo;
     private long mCreateTime;
-    PtrFrameLayout ptrFrameLayout;
-    RecyclerView.LayoutManager mLayoutManager;
-    CustomPtrHeader header;
-    int mPinNumber;
-    ItemTouchHelper.Callback mySimpleCallback;
+    private PtrFrameLayout ptrFrameLayout;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private CustomPtrHeader header;
+    private int mPinNumber;
+    private ItemTouchHelper.Callback mySimpleCallback;
 
     private int pullToAddState;
 
@@ -247,13 +247,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     }
 
 
-    TextView itemText;
+    private TextView itemText;
     //    RelativeLayout platform;
 //    LinearLayout itemMenu;
-    ImageView itemEditButton, itemPinButton;
-    RecyclerViewAdapter.MyViewHolder currentOpenedHolder;
-    RecyclerViewAdapter.MyViewHolder lastOpenedHolder;
-    List<RecyclerViewAdapter.MyViewHolder> openedMenuStack = new ArrayList<>();
+    private ImageView itemEditButton;
+    private ImageView itemPinButton;
+    private RecyclerViewAdapter.MyViewHolder currentOpenedHolder;
+    private RecyclerViewAdapter.MyViewHolder lastOpenedHolder;
+    private List<RecyclerViewAdapter.MyViewHolder> openedMenuStack = new ArrayList<>();
 
     private void closeOtherMenu() {
         for (RecyclerViewAdapter.MyViewHolder holder : openedMenuStack) {

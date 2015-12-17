@@ -2,7 +2,6 @@
     <string name="app_name">Litedo</string>
     <string name="no_item_info">没有任务啦( • ̀ω•́ )</string>
     <string name="litedo">Litedo—Like to do</string>
-    <string name="author">开发者：@mmga</string>
     <string name="version">v0.7.0</string>
     <string name="settings">settings</string>
     <string name="setting">设置</string>
@@ -10,7 +9,6 @@
     <string name="show_time">显示时间</string>
     <string name="about">关于</string>
     <string name="show_time_content">便签上显示创建时间</string>
-    <string name="fast_edit_description">取消弹出输入栏，直接在便签上添加/编辑</string>
     <string name="pull_to_add">下拉新建</string>
     <string name="pull_to_add_description">顶部下拉新建便签,重启后生效</string>
     <string name="license">版权说明</string>
@@ -35,6 +33,7 @@
     <string name="three_weeks_ago">3周前</string>
     <string name="one_month_ago">1个月前</string>
     <string name="three_months_ago">3个月前</string>
+    <string name="suggest">反馈建议</string>
 
 
     <item name="tag_first" type="id" />

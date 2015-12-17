@@ -8,7 +8,7 @@ import com.mmga.litedo.R;
 
 public class CustomFab extends FloatingActionButton {
 
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
 
     public CustomFab(Context context) {
         super(context);
@@ -29,8 +29,4 @@ public class CustomFab extends FloatingActionButton {
         fab = (FloatingActionButton) findViewById(R.id.fab_add);
     }
 
-    @Override
-    public void show() {
-        super.show();
-    }
 }

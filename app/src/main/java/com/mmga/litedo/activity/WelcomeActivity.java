@@ -1,4 +1,4 @@
-package com.mmga.litedo.Aty;
+package com.mmga.litedo.activity;
 
 import android.app.Activity;
 import android.content.Intent;

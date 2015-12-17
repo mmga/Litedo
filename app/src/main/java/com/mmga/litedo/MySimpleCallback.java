@@ -2,6 +2,7 @@ package com.mmga.litedo;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -13,7 +14,7 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
 
 
     private final ItemTouchHelperAdapter mAdapter;
-    int pinNumber;
+    private int pinNumber;
 
     public MySimpleCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -89,7 +90,7 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
             View itemView = viewHolder.itemView;
             Paint p = new Paint();
             if (dX > 0) {
-                p.setColor(MyApplication.getContext().getResources().getColor(R.color.colorPrimary));
+                p.setColor(ContextCompat.getColor(MyApplication.getContext(), R.color.colorPrimary));
                 int alpha = (int) (0.9 * (255 - dX * 255 / DensityUtil.getDisplayMetrics().widthPixels));
                 p.setAlpha(alpha);
                 c.drawRect((float) itemView.getLeft(), (float) itemView.getTop(), dX,

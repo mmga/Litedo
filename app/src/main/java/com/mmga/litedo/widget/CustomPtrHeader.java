@@ -19,11 +19,11 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
 public class CustomPtrHeader extends RelativeLayout implements PtrUIHandler {
 
 
-    ImageView imageView;
-    int ADD_NEW_MEMO = 0;
-    int CANCEL_NEW_MEMO = 1;
-    int flagAdd;
-    RecyclerViewAdapter adapter;
+    private ImageView imageView;
+    private final int ADD_NEW_MEMO = 0;
+    private final int CANCEL_NEW_MEMO = 1;
+    private int flagAdd;
+    private RecyclerViewAdapter adapter;
 
     public CustomPtrHeader(Context context, RecyclerViewAdapter adapter) {
         super(context);

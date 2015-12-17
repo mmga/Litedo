@@ -11,13 +11,13 @@
 
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Aty.ListActivity"
+            android:name=".activity.ListActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Aty.WelcomeActivity"
+            android:name=".activity.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,13 +28,13 @@
 
 
         <activity
-            android:name=".Aty.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/setting"/>
 
         <activity
-            android:name=".Aty.TextInputActivity"
+            android:name=".activity.TextInputActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Dialog" />
