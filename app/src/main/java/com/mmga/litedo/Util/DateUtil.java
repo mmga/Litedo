@@ -1,4 +1,4 @@
-package com.mmga.litedo.Util;
+package com.mmga.litedo.util;
 
 import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;

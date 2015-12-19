@@ -23,12 +23,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mmga.litedo.Adapter.RecyclerViewAdapter;
+import com.mmga.litedo.adapter.RecyclerViewAdapter;
 import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DensityUtil;
-import com.mmga.litedo.Util.SharedPrefsUtil;
-import com.mmga.litedo.Util.StatusBarCompat;
+import com.mmga.litedo.util.DensityUtil;
+import com.mmga.litedo.util.SharedPrefsUtil;
+import com.mmga.litedo.util.StatusBarCompat;
 import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.widget.CustomFab;
@@ -53,7 +53,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private CustomPtrHeader header;
     private int mPinNumber;
     private ItemTouchHelper.Callback mySimpleCallback;
-
+    private ImageView itemEditButton;
+    private ImageView itemPinButton;
+    private RecyclerViewAdapter.MyViewHolder currentOpenedHolder;
+    private RecyclerViewAdapter.MyViewHolder lastOpenedHolder;
+    private List<RecyclerViewAdapter.MyViewHolder> openedMenuStack = new ArrayList<>();
+    //item menu的宽度，按钮数量*按钮宽度+divider+左右边距
+    private static final int ITEM_MENU_WIDTH = 2 * 44 + 2 + 4;
     private int pullToAddState;
 
 
@@ -87,7 +93,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fabAdd.hide();
                 openActivityForNew();
             }
         });
@@ -100,8 +105,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 super.onSwiped(viewHolder, direction);
                 showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
-                    mRecyclerView.setVisibility(View.GONE);
-                    noItemInfo.setVisibility(View.VISIBLE);
+                    setRecyclerViewVisible(false);
                 }
             }
 
@@ -111,19 +115,21 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
+    //配置下拉刷新
     private void configPTR() {
         pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", SettingsActivity.PULL_TO_DO_NOTHING);
+        //如果下拉新建功能开启，添加自定义header
         if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
             header = new CustomPtrHeader(this, mAdapter);
             ptrFrameLayout.setHeaderView(header);
             ptrFrameLayout.addPtrUIHandler(header);
         }
-        Log.d("mmga", "" + (ptrFrameLayout.getHeaderView().getVisibility() == View.VISIBLE ? 1 : 0));
 
         ptrFrameLayout.setPtrHandler(new PtrHandler() {
-            //配置下拉刷新，只在无swipe，无drag且第一个item完全可见时启用
+
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                //在无swipe，无drag且第一个item完全可见时启用，或者没有item时
                 if (mLayoutManager instanceof LinearLayoutManager) {
                     if (((LinearLayoutManager) mLayoutManager).findFirstCompletelyVisibleItemPosition() == 0) {
                         if (mAdapter.canPullDown()) {
@@ -138,17 +144,10 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                Log.d("mmga", "onUIRefreshBegin");
+                //下拉到位后松手时
                 if (pullToAddState == SettingsActivity.PULL_TO_ADD) {
-                    final Memo memo = new Memo();
-                    memo.setCreateTimeInMillis(System.currentTimeMillis());
-                    mRecyclerView.getItemAnimator().isRunning(new RecyclerView.ItemAnimator.ItemAnimatorFinishedListener() {
-                        @Override
-                        public void onAnimationsFinished() {
-                            openActivityForNew();
-                            frame.refreshComplete();
-                        }
-                    });
+                    frame.refreshComplete();
+                    openActivityForNew();
                 }
             }
         });
@@ -158,8 +157,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         final Snackbar snackbar = Snackbar.make(mRecyclerView, "Confirm Deletion?", Snackbar.LENGTH_LONG).setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                noItemInfo.setVisibility(View.GONE);
+                setRecyclerViewVisible(true);
                 mAdapter.undoDelete();
             }
         });
@@ -186,24 +184,11 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private void loadData() {
         mAdapter.setAdapterData();
         if (mAdapter.getItemCount() == 0) {
-            mRecyclerView.setVisibility(View.GONE);
-            noItemInfo.setVisibility(View.VISIBLE);
+            setRecyclerViewVisible(false);
         } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            noItemInfo.setVisibility(View.GONE);
+            setRecyclerViewVisible(true);
         }
     }
-
-
-//    private void setAnimation() {
-//
-//        Animation animation = AnimationUtils.loadAnimation(MyApplication.getContext(), R.anim.slide_in_right);
-//        LayoutAnimationController controller = new LayoutAnimationController(animation);
-//        controller.setDelay(0.2f);
-//        controller.setOrder(LayoutAnimationController.ORDER_NORMAL);
-//        mRecyclerView.setLayoutAnimation(controller);
-//        mRecyclerView.startAnimation(animation);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -227,6 +212,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onPause() {
         if (mAdapter != null) {
+            //将adapter中的数据同步到数据库，其他时候的操作都是对mAdapter里的list进行操作，只有pause的时候同步到数据库
             mAdapter.syncMemo();
         }
         super.onPause();
@@ -242,20 +228,23 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     protected void onStart() {
-        loadData();
         super.onStart();
+        loadData();
+    }
+
+    private void setRecyclerViewVisible(Boolean isVisible) {
+        if (isVisible) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            noItemInfo.setVisibility(View.GONE);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            noItemInfo.setVisibility(View.VISIBLE);
+        }
     }
 
 
-    private TextView itemText;
-    //    RelativeLayout platform;
-//    LinearLayout itemMenu;
-    private ImageView itemEditButton;
-    private ImageView itemPinButton;
-    private RecyclerViewAdapter.MyViewHolder currentOpenedHolder;
-    private RecyclerViewAdapter.MyViewHolder lastOpenedHolder;
-    private List<RecyclerViewAdapter.MyViewHolder> openedMenuStack = new ArrayList<>();
-
+    //每当点开一个item的menu时，关闭其他的menu。肯定有改进办法，现在这方法太丑了。。
+    //// TODO: 2015/12/18
     private void closeOtherMenu() {
         for (RecyclerViewAdapter.MyViewHolder holder : openedMenuStack) {
             if (holder != currentOpenedHolder) {
@@ -267,13 +256,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     //点击item弹出菜单
     @Override
     public void onItemClick(final View view, final Memo memo, final RecyclerViewAdapter.MyViewHolder holder) {
-        itemText = (TextView) view.findViewById(R.id.fg_view);
+        TextView itemText = (TextView) view.findViewById(R.id.fg_view);
         LinearLayout itemMenu = (LinearLayout) view.findViewById(R.id.item_menu);
         itemEditButton = (ImageView) view.findViewById(R.id.item_edit_button);
         itemPinButton = (ImageView) view.findViewById(R.id.item_pin_button);
 
         if (itemMenu.getVisibility() == View.GONE) {
             showItemMenu(holder);
+            //用来记录当前打开的这个item menu,关闭其他的。
             openedMenuStack.add(holder);
             currentOpenedHolder = holder;
             closeOtherMenu();
@@ -336,15 +326,17 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
     }
 
-    //打开输入框，new
+    //打开打开TextInputActivity，new
     private void openActivityForNew() {
+        fabAdd.hide();
         Intent i = new Intent(ListActivity.this, TextInputActivity.class);
         startActivityForResult(i, 1);
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
     }
 
-    //打开输入框，edit
+    //打开TextInputActivity，edit
     private void openActivityForEdit(Memo memo, int position) {
+        fabAdd.hide();
         Intent intent = new Intent(ListActivity.this, TextInputActivity.class);
         //用bundle传parcelable? // TODO: 2015/12/15
         intent.putExtra("data", memo.getContent());
@@ -354,12 +346,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
     }
 
+
     private void showItemMenu(RecyclerViewAdapter.MyViewHolder holder) {
+
         if (holder.itemMenu.getVisibility() == View.VISIBLE) {
             return;
         }
         holder.itemMenu.setVisibility(View.VISIBLE);
-        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 94);
+        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, ITEM_MENU_WIDTH);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(holder.itemMenu, "translationX", itemMenuWidth, 0);
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(holder.platform, "translationX", 0, -itemMenuWidth);
         AnimatorSet set = new AnimatorSet();
@@ -374,7 +368,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         if (holder.itemMenu.getVisibility() == View.GONE) {
             return null;
         }
-        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, 94);
+        int itemMenuWidth = DensityUtil.dip2px(ListActivity.this, ITEM_MENU_WIDTH);
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(holder.itemMenu, "translationX", 0, itemMenuWidth);
         ObjectAnimator anim2 = ObjectAnimator.ofFloat(holder.platform, "translationX", -itemMenuWidth, 0);
         AnimatorSet set = new AnimatorSet();

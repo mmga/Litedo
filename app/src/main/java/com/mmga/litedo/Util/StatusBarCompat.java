@@ -1,4 +1,4 @@
-package com.mmga.litedo.Util;
+package com.mmga.litedo.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

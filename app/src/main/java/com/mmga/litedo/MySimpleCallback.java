@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.mmga.litedo.Util.DensityUtil;
+import com.mmga.litedo.util.DensityUtil;
 
 
 public class MySimpleCallback extends ItemTouchHelper.Callback {

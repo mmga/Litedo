@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.SharedPrefsUtil;
-import com.mmga.litedo.Util.StatusBarCompat;
+import com.mmga.litedo.util.SharedPrefsUtil;
+import com.mmga.litedo.util.StatusBarCompat;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 

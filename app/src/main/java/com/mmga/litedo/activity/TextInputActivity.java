@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 
 import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.LogUtil;
+import com.mmga.litedo.util.LogUtil;
 
 public class TextInputActivity extends Activity {
 

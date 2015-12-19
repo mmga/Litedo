@@ -1,4 +1,4 @@
-package com.mmga.litedo.Util;
+package com.mmga.litedo.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

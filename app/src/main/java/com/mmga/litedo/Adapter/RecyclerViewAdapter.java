@@ -1,4 +1,4 @@
-package com.mmga.litedo.Adapter;
+package com.mmga.litedo.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,8 +14,8 @@ import com.mmga.litedo.MyApplication;
 import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.DBUtil;
-import com.mmga.litedo.Util.DateUtil;
-import com.mmga.litedo.Util.SharedPrefsUtil;
+import com.mmga.litedo.util.DateUtil;
+import com.mmga.litedo.util.SharedPrefsUtil;
 import com.mmga.litedo.db.Model.Memo;
 
 import java.util.Collections;

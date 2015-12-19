@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.mmga.litedo.Adapter.RecyclerViewAdapter;
+import com.mmga.litedo.adapter.RecyclerViewAdapter;
 import com.mmga.litedo.R;
-import com.mmga.litedo.Util.DensityUtil;
+import com.mmga.litedo.util.DensityUtil;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrUIHandler;
