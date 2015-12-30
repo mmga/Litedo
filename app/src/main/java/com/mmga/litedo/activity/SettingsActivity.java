@@ -69,33 +69,25 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mSuggest.setOnClickListener(this);
         mRating.setOnClickListener(this);
         mLicense.setOnClickListener(this);
-        mShowTimeCheckbox.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.showtime_checkbox:
-                switchShowTimeCheckbox();
             case R.id.showtime:
                 switchShowTimeCheckbox();
                 break;
-            case R.id.pull_to_add_checkbox:
-                switchPullToAddCheckbox();
             case R.id.pull_to_add:
                 switchPullToAddCheckbox();
                 break;
             case R.id.suggest:
                 sendEmail();
-//                ToastUtil.showShort("假的");
                 break;
             case R.id.rating:
                 openMarket();
-//                ToastUtil.showShort("是假的");
                 break;
             case R.id.license_layout:
-//                ToastUtil.showShort("是头发的特技");
                 break;
         }
     }
@@ -121,20 +113,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void switchPullToAddCheckbox() {
         if (!mPullToAddCheckbox.isChecked()) {
             mPullToAddCheckbox.setChecked(true);
-            pullToAddState = PULL_TO_ADD;
         } else {
             mPullToAddCheckbox.setChecked(false);
-            pullToAddState = PULL_TO_DO_NOTHING;
         }
     }
 
     private void switchShowTimeCheckbox() {
         if (!mShowTimeCheckbox.isChecked()) {
             mShowTimeCheckbox.setChecked(true);
-            isShowTimeChecked = true;
         } else {
             mShowTimeCheckbox.setChecked(false);
-            isShowTimeChecked = false;
         }
     }
 
@@ -142,13 +130,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = getSharedPreferences("settings", MODE_PRIVATE).edit();
-        editor.putBoolean("isShowTime", isShowTimeChecked);
-        editor.putInt("pullToAddState", pullToAddState);
+        editor.putBoolean("isShowTime", mShowTimeCheckbox.isChecked());
+        editor.putInt("pullToAddState", mPullToAddCheckbox.isChecked()?PULL_TO_ADD:PULL_TO_DO_NOTHING);
         editor.apply();
 
-//        SharedPrefsUtil.putValue(this, "settings", "isShowTime", isShowTimeChecked);
-//        SharedPrefsUtil.putValue(this, "settings", "pullToAddState", pullToAddState);
-//        Log.d("mmga", "" + pullToAddState);
 
     }
 }
