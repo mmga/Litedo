@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mmga.litedo.adapter.RecyclerViewAdapter;
-import com.mmga.litedo.MySimpleCallback;
+import com.mmga.litedo.ItemTouchHelperCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.util.DensityUtil;
 import com.mmga.litedo.util.SharedPrefsUtil;
@@ -52,7 +52,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView.LayoutManager mLayoutManager;
     private CustomPtrHeader header;
     private int mPinNumber;
-    private ItemTouchHelper.Callback mySimpleCallback;
+//    private boolean isPined;
+    private ItemTouchHelper.Callback itemTouchHelperCallback;
     private ImageView itemEditButton;
     private ImageView itemPinButton;
     private RecyclerViewAdapter.MyViewHolder currentOpenedHolder;
@@ -99,23 +100,26 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         configPTR();
 
-        mySimpleCallback = new MySimpleCallback(mAdapter) {
+        itemTouchHelperCallback = new ItemTouchHelperCallback(mAdapter) {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 super.onSwiped(viewHolder, direction);
+//                if (viewHolder.getAdapterPosition() < mPinNumber) {
+//                    isPined = true;
+//                }
                 showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
+                    mPinNumber = 0;
                     setRecyclerViewVisible(false);
                 }
             }
 
         };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mySimpleCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    //配置下拉刷新
     private void configPTR() {
         pullToAddState = SharedPrefsUtil.getValue(this, "settings", "pullToAddState", SettingsActivity.PULL_TO_DO_NOTHING);
         //如果下拉新建功能开启，添加自定义header
@@ -174,13 +178,16 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 super.onDismissed(snackbar, event);
+//                if(isPined){
+//                    mPinNumber--;
+//                }
+//                isPined = false;
                 fabAdd.setClickable(true);
             }
         });
         snackbar.show();
     }
 
-    //读取数据库，刷新列表
     private void loadData() {
         mAdapter.setAdapterData();
         if (mAdapter.getItemCount() == 0) {
@@ -222,7 +229,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onResume() {
         super.onResume();
         mPinNumber = DBUtil.getPinNumber();
-        ((MySimpleCallback) mySimpleCallback).setPinNumber(mPinNumber);
+        ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
         fabAdd.show();
     }
 
@@ -290,7 +297,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
                 }
             });
-            //置顶按钮点击事件
             itemPinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -308,13 +314,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                                 holder.pinStateImage.setVisibility(View.VISIBLE);
                                 mAdapter.moveData(memo, holder.getAdapterPosition(), 0);
                                 mPinNumber++;
-                                ((MySimpleCallback) mySimpleCallback).setPinNumber(mPinNumber);
+                                ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
                             } else {
                                 memo.setTop(Memo.TOP_NORMAL);
                                 holder.pinStateImage.setVisibility(View.GONE);
                                 mAdapter.moveData(memo, holder.getAdapterPosition(), mPinNumber - 1);
                                 mPinNumber--;
-                                ((MySimpleCallback) mySimpleCallback).setPinNumber(mPinNumber);
+                                ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
                             }
                         }
                     });
@@ -326,7 +332,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         }
     }
 
-    //打开打开TextInputActivity，new
     private void openActivityForNew() {
         fabAdd.hide();
         Intent i = new Intent(ListActivity.this, TextInputActivity.class);
@@ -334,11 +339,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
     }
 
-    //打开TextInputActivity，edit
     private void openActivityForEdit(Memo memo, int position) {
         fabAdd.hide();
         Intent intent = new Intent(ListActivity.this, TextInputActivity.class);
-        //用bundle传parcelable? // TODO: 2015/12/15
         intent.putExtra("data", memo.getContent());
         intent.putExtra("position", position);
         mCreateTime = memo.getCreateTimeInMillis();

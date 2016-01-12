@@ -10,13 +10,13 @@ import android.view.View;
 import com.mmga.litedo.util.DensityUtil;
 
 
-public class MySimpleCallback extends ItemTouchHelper.Callback {
+public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
 
     private final ItemTouchHelperAdapter mAdapter;
     private int pinNumber;
 
-    public MySimpleCallback(ItemTouchHelperAdapter mAdapter) {
+    public ItemTouchHelperCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
     }
 
@@ -58,7 +58,6 @@ public class MySimpleCallback extends ItemTouchHelper.Callback {
     public boolean isItemViewSwipeEnabled() {
         return true;
     }
-
 
 
     @Override
