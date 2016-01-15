@@ -2,10 +2,8 @@ package com.mmga.litedo;
 
 import com.mmga.litedo.db.DBUtil;
 
-/**
- * Created by mmga on 2016/1/15.
- */
-public  class PinHelper {
+
+public class PinHelper {
     private static int pinNumber = DBUtil.getPinNumber();
 
     public static int getPinNumber() {
@@ -14,5 +12,13 @@ public  class PinHelper {
 
     public static void setPinNumber(int pinNumber) {
         PinHelper.pinNumber = pinNumber;
+    }
+
+    public static void plusPinNum() {
+        pinNumber++;
+    }
+
+    public static void minusPinNum() {
+        pinNumber--;
     }
 }

@@ -14,7 +14,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
 
     private final ItemTouchHelperAdapter mAdapter;
-    private int pinNumber;
 
     public ItemTouchHelperCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -41,7 +40,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
-        int position = pinNumber - 1;
+        int position = PinHelper.getPinNumber() - 1;
         if ((current.getAdapterPosition() > position && target.getAdapterPosition() <= position)
                 || ((current.getAdapterPosition() <= position && target.getAdapterPosition() > position))) {
             return false;
@@ -98,12 +97,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
             super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
-
-
-    public void setPinNumber(int pinNumber) {
-        this.pinNumber = pinNumber;
-    }
-
 
     public interface ItemTouchHelperAdapter {
 

@@ -24,9 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mmga.litedo.ItemTouchHelperCallback;
+import com.mmga.litedo.PinHelper;
 import com.mmga.litedo.R;
 import com.mmga.litedo.adapter.RecyclerViewAdapter;
-import com.mmga.litedo.db.DBUtil;
 import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.util.DensityUtil;
 import com.mmga.litedo.util.SharedPrefsUtil;
@@ -51,7 +51,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private PtrFrameLayout ptrFrameLayout;
     private RecyclerView.LayoutManager mLayoutManager;
     private CustomPtrHeader header;
-   public int mPinNumber;
     private boolean isLastDeletePin;
     private ItemTouchHelper.Callback itemTouchHelperCallback;
     private ImageView itemEditButton;
@@ -104,13 +103,13 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 super.onSwiped(viewHolder, direction);
-                if (viewHolder.getLayoutPosition() < mPinNumber) {
-                    mPinNumber--;
+                if (viewHolder.getLayoutPosition() < PinHelper.getPinNumber()) {
+                    PinHelper.minusPinNum();
                     isLastDeletePin = true;
                 } else {
                     isLastDeletePin = false;
                 }
-                Log.d("mmga", "pinNumber = " + mPinNumber);
+                Log.d("mmga", "pinNumber = " + PinHelper.getPinNumber());
                 showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
                     setRecyclerViewVisible(false);
@@ -166,7 +165,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             public void onClick(View v) {
                 setRecyclerViewVisible(true);
                 if (isLastDeletePin) {
-                    mPinNumber++;
+                    PinHelper.plusPinNum();
                 }
                 mAdapter.undoDelete();
             }
@@ -230,9 +229,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("mmga", "pinNumber = " + mPinNumber);
-        mPinNumber = DBUtil.getPinNumber();
-        ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
+        Log.d("mmga", "pinNumber = " + PinHelper.getPinNumber());
         fabAdd.show();
     }
 
@@ -316,16 +313,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                                 memo.setTop(Memo.TOP_PIN);
                                 holder.pinStateImage.setVisibility(View.VISIBLE);
                                 mAdapter.moveData(memo, holder.getAdapterPosition(), 0);
-                                mPinNumber++;
-                                Log.d("mmga", "pinNumber = " + mPinNumber);
-                                ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
+                                PinHelper.plusPinNum();
+                                Log.d("mmga", "pinNumber = " + PinHelper.getPinNumber());
                             } else {
                                 memo.setTop(Memo.TOP_NORMAL);
                                 holder.pinStateImage.setVisibility(View.GONE);
-                                mAdapter.moveData(memo, holder.getAdapterPosition(), mPinNumber - 1);
-                                mPinNumber--;
-                                Log.d("mmga", "pinNumber = " + mPinNumber);
-                                ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
+                                mAdapter.moveData(memo, holder.getAdapterPosition(), PinHelper.getPinNumber() - 1);
+                                PinHelper.minusPinNum();
+                                Log.d("mmga", "pinNumber = " + PinHelper.getPinNumber());
                             }
                         }
                     });
@@ -404,7 +399,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             Memo memo = new Memo();
             memo.setContent(data.getStringExtra("content"));
             memo.setCreateTimeInMillis(data.getLongExtra("time", 0));
-            mAdapter.addData(memo, mPinNumber);
+            mAdapter.addData(memo, PinHelper.getPinNumber());
             mRecyclerView.smoothScrollToPosition(0);
         } else if (requestCode == 1 && resultCode == TextInputActivity.RESULT_CODE_EDIT) {
             Memo memo = new Memo();
@@ -414,7 +409,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             } else {
                 memo.setContent(data.getStringExtra("content"));
                 memo.setCreateTimeInMillis(mCreateTime);
-                memo.setTop(position < mPinNumber ? Memo.TOP_PIN : Memo.TOP_NORMAL);
+                memo.setTop(position < PinHelper.getPinNumber() ? Memo.TOP_PIN : Memo.TOP_NORMAL);
                 mAdapter.updateData(position, memo);
             }
 
