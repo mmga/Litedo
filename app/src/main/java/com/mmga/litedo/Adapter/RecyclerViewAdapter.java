@@ -1,7 +1,6 @@
 package com.mmga.litedo.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mmga.litedo.ItemTouchHelperCallback;
 import com.mmga.litedo.MyApplication;
-import com.mmga.litedo.MySimpleCallback;
 import com.mmga.litedo.R;
 import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.util.DateUtil;
 import com.mmga.litedo.util.SharedPrefsUtil;
-import com.mmga.litedo.db.Model.Memo;
 
 import java.util.Collections;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener, MySimpleCallback.ItemTouchHelperAdapter {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener, ItemTouchHelperCallback.ItemTouchHelperAdapter {
 
 
     //定义接口
@@ -147,7 +146,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements MySimpleCallback.ItemTouchHelperViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperCallback.ItemTouchHelperViewHolder {
 
         public TextView mTextView;
         public View recyclerViewItem;
@@ -176,14 +175,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onItemSelected() {
             recyclerViewItem.setScaleY(0.95f);
             canPullDown = false;
-            Log.d("mmga", "canPullDownFalse");
         }
 
         @Override
         public void onItemClear() {
             recyclerViewItem.setScaleY(1f);
             canPullDown = true;
-            Log.d("mmga", "canPullDownTrue");
         }
 
     }
