@@ -23,14 +23,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mmga.litedo.adapter.RecyclerViewAdapter;
 import com.mmga.litedo.ItemTouchHelperCallback;
 import com.mmga.litedo.R;
+import com.mmga.litedo.adapter.RecyclerViewAdapter;
+import com.mmga.litedo.db.DBUtil;
+import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.util.DensityUtil;
 import com.mmga.litedo.util.SharedPrefsUtil;
 import com.mmga.litedo.util.StatusBarCompat;
-import com.mmga.litedo.db.DBUtil;
-import com.mmga.litedo.db.Model.Memo;
 import com.mmga.litedo.widget.CustomFab;
 import com.mmga.litedo.widget.CustomPtrHeader;
 
@@ -51,8 +51,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private PtrFrameLayout ptrFrameLayout;
     private RecyclerView.LayoutManager mLayoutManager;
     private CustomPtrHeader header;
-    private int mPinNumber;
-//    private boolean isPined;
+   public int mPinNumber;
+    private boolean isLastDeletePin;
     private ItemTouchHelper.Callback itemTouchHelperCallback;
     private ImageView itemEditButton;
     private ImageView itemPinButton;
@@ -104,12 +104,15 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 super.onSwiped(viewHolder, direction);
-//                if (viewHolder.getAdapterPosition() < mPinNumber) {
-//                    isPined = true;
-//                }
+                if (viewHolder.getLayoutPosition() < mPinNumber) {
+                    mPinNumber--;
+                    isLastDeletePin = true;
+                } else {
+                    isLastDeletePin = false;
+                }
+                Log.d("mmga", "pinNumber = " + mPinNumber);
                 showUndoSnackbar();
                 if (mAdapter.getItemCount() == 0) {
-                    mPinNumber = 0;
                     setRecyclerViewVisible(false);
                 }
             }
@@ -162,6 +165,9 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onClick(View v) {
                 setRecyclerViewVisible(true);
+                if (isLastDeletePin) {
+                    mPinNumber++;
+                }
                 mAdapter.undoDelete();
             }
         });
@@ -178,10 +184,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 super.onDismissed(snackbar, event);
-//                if(isPined){
-//                    mPinNumber--;
-//                }
-//                isPined = false;
                 fabAdd.setClickable(true);
             }
         });
@@ -228,6 +230,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("mmga", "pinNumber = " + mPinNumber);
         mPinNumber = DBUtil.getPinNumber();
         ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
         fabAdd.show();
@@ -314,12 +317,14 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                                 holder.pinStateImage.setVisibility(View.VISIBLE);
                                 mAdapter.moveData(memo, holder.getAdapterPosition(), 0);
                                 mPinNumber++;
+                                Log.d("mmga", "pinNumber = " + mPinNumber);
                                 ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
                             } else {
                                 memo.setTop(Memo.TOP_NORMAL);
                                 holder.pinStateImage.setVisibility(View.GONE);
                                 mAdapter.moveData(memo, holder.getAdapterPosition(), mPinNumber - 1);
                                 mPinNumber--;
+                                Log.d("mmga", "pinNumber = " + mPinNumber);
                                 ((ItemTouchHelperCallback) itemTouchHelperCallback).setPinNumber(mPinNumber);
                             }
                         }

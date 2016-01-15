@@ -104,6 +104,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         this.pinNumber = pinNumber;
     }
 
+
     public interface ItemTouchHelperAdapter {
 
         boolean onItemMove(int fromPosition, int toPosition);
